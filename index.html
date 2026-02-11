@@ -801,8 +801,29 @@
         let works = [];
         
         document.addEventListener('DOMContentLoaded', function() {
-            if (typeof allWorks !== 'undefined') {
-                works = allWorks.map((work, index) => ({
+    if (typeof allWorks !== 'undefined') {
+        works = allWorks.map((work, index) => ({
+            id: index + 1,
+            title: work.Title_JP || work.Title_EN || work.Title_Native || '無題',
+            country: mapCountry(work.Country),
+            platform: mapPlatform(work.Platform),
+            nextAir: work.Year ? `${work.Year}年` : '未定',
+            thumbnail: work.Country ? `${getCountryName(work.Country)}BLドラマ` : '作品画像',
+            detailUrl: '/works/' + (work.Title_EN || '').toLowerCase().replace(/\s+/g, '-'),
+            actors: [work.Cast1, work.Cast2].filter(a => a && a.trim()),
+            viewCount: Math.floor(Math.random() * 5000) + 500
+        }));
+        
+        console.log(`${works.length}件の作品を読み込みました`);
+        
+        // 初期表示
+        if (typeof renderRanking === 'function') renderRanking();
+        if (typeof renderWorks === 'function') renderWorks();
+        if (typeof renderCalendar === 'function') renderCalendar();
+    } else {
+        console.error('data/works.jsが読み込まれていません');
+    }
+});
                     id: work.id || index + 1,
                     title: work.Title_JP || work.Title_EN || '無題',
                     country: mapCountry(work.Country),

@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asia BL Archive - ランキング&俳優検索対応版</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif;
+            background: #f5f5f5;
+            color: #2c2c2c;
+            line-height: 1.6;
+            padding-bottom: 320px;
+        }
+
+        header {
+            background: white;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: #2c2c2c;
+            font-family: 'Georgia', 'Yu Mincho', 'Hiragino Mincho ProN', serif;
+            letter-spacing: 1px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            font-family: 'Georgia', 'Yu Mincho', 'Hiragino Mincho ProN', serif;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+        }
+
+        .hero p {
+            font-size: 1rem;
+            opacity: 0.9;
+            font-family: 'Georgia', 'Yu Mincho', 'Hiragino Mincho ProN', serif;
+            font-weight: 300;
+        }
+
+        .news-banner {
+            background: white;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .news-banner-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .news-banner-header h3 {
+            font-size: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .news-banner-list {
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+        }
+
+        .news-banner-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            min-width: 300px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .news-badge {
+            background: #ff4757;
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .news-date {
+            color: #999;
+            font-size: 0.85rem;
+        }
+
+        .news-title {
+            flex: 1;
+            font-size: 0.9rem;
+        }
+
+        .ranking-section {
+            padding: 1.5rem 2rem;
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .ranking-header {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .ranking-scroll {
+            display: flex;
+            gap: 1.5rem;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+        }
+
+        .ranking-card {
+            min-width: 200px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .ranking-number {
+            position: absolute;
+            top: -0.5rem;
+            left: -0.5rem;
+            background: #667eea;
+            color: white;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            z-index: 1;
+        }
+
+        .ranking-thumbnail {
+            background: #667eea;
+            color: white;
+            height: 280px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .ranking-title {
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .ranking-meta {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .country-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1.5rem 2rem;
+            background: white;
+            flex-wrap: wrap;
+        }
+
+        .country-tab {
+            padding: 0.5rem 1.5rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif;
+        }
+
+        .country-tab.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .country-tab:hover:not(.active) {
+            border-color: #667eea;
+        }
+
+        .controls {
+            padding: 1.5rem 2rem;
+            background: white;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .control-group label {
+            font-weight: 500;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 250px;
+            max-width: 400px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.6rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.6rem 1rem 0.6rem 2.5rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 20px;
+            background: white;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .works-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .results-info {
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .works-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .work-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .work-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .work-thumbnail {
+            background: #667eea;
+            color: white;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            position: relative;
+        }
+
+        .work-info {
+            padding: 1rem;
+        }
+
+        .work-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .work-meta {
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .work-platform {
+            display: inline-block;
+            background: #f0f0f0;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        select {
+            padding: 0.5rem 2rem 0.5rem 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 20px;
+            background: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.8rem center;
+        }
+
+        .calendar-section {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .calendar-header {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px 8px 0 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .calendar-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .selected-count {
+            color: #667eea;
+            font-size: 0.9rem;
+        }
+
+        .clear-btn {
+            background: #f0f0f0;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+        }
+
+        .calendar-list {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0 0 8px 8px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .calendar-item {
+            padding: 1rem;
+            border-left: 3px solid #667eea;
+            margin-bottom: 1rem;
+            background: #f9f9f9;
+            border-radius: 4px;
+        }
+
+        .calendar-date {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .calendar-work-title {
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+        }
+
+        .calendar-platform {
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        .empty-calendar {
+            text-align: center;
+            padding: 3rem;
+            color: #999;
+        }
+
+        .site-footer {
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+
+        .footer-links a:hover {
+            color: #667eea;
+        }
+
+        .footer-copyright {
+            text-align: center;
+            color: #999;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+            
+            .works-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Asia BL Archive</div>
+    </header>
+
+    <section class="hero">
+        <h1>アジアBL、国を選んで深掘りする</h1>
+        <p>タイ・台湾・韓国・中国・日本の実写BLを網羅</p>
+    </section>
+
+    <!-- お知らせバナー -->
+    <div class="news-banner">
+        <div class="news-banner-header">
+            <h3>📢 最新のお知らせ</h3>
+            <a href="news-page.html" class="more-link">もっと見る →</a>
+        </div>
+        <div class="news-banner-list" id="newsBannerList">
+            <a href="news-page.html" class="news-banner-item">
+                <span class="news-badge">NEW</span>
+                <span class="news-date">2026.02.11</span>
+                <span class="news-title">サイトをリニューアルしました</span>
+            </a>
+            <a href="news-page.html" class="news-banner-item">
+                <span class="news-date">2026.02.10</span>
+                <span class="news-title">俳優詳細ページを追加しました</span>
+            </a>
+            <a href="news-page.html" class="news-banner-item">
+                <span class="news-date">2026.02.05</span>
+                <span class="news-title">2月配信予定の新作BLドラマ情報を追加</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- ランキングセクション（国別タブの上） -->
+    <div style="padding: 1.5rem 2rem; background: white; border-bottom: 1px solid #e0e0e0; max-width: 1200px; margin: 0 auto;">
+        <div class="ranking-section" style="margin: 0; padding: 0; border: none; background: transparent;">
+            <div class="ranking-header">
+                📊 今週の人気作品 TOP10
+            </div>
+            <div class="ranking-scroll" id="rankingScroll"></div>
+        </div>
+    </div>
+
+    <div class="country-tabs">
+        <button class="country-tab active" data-country="all">すべて</button>
+        <button class="country-tab" data-country="japan">日本 JP</button>
+        <button class="country-tab" data-country="thailand">タイ TH</button>
+        <button class="country-tab" data-country="taiwan">台湾 TW</button>
+        <button class="country-tab" data-country="korea">韓国 KR</button>
+        <button class="country-tab" data-country="china">中国 CN</button>
+    </div>
+
+    <div class="controls">
+        <div class="control-group">
+            <label>配信年:</label>
+            <select id="yearFilter">
+                <option value="all">すべて</option>
+                <option value="2024">2024年</option>
+                <option value="2025">2025年</option>
+                <option value="2026" selected>2026年</option>
+                <option value="2027">2027年</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label>配信月:</label>
+            <select id="monthFilter">
+                <option value="all">すべて</option>
+                <option value="1">1月</option>
+                <option value="2" selected>2月</option>
+                <option value="3">3月</option>
+                <option value="4">4月</option>
+                <option value="5">5月</option>
+                <option value="6">6月</option>
+                <option value="7">7月</option>
+                <option value="8">8月</option>
+                <option value="9">9月</option>
+                <option value="10">10月</option>
+                <option value="11">11月</option>
+                <option value="12">12月</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label>ソート:</label>
+            <select id="sortSelect">
+                <option value="date">配信日時順</option>
+                <option value="title">タイトル順</option>
+                <option value="country">国別</option>
+                <option value="platform">配信サイト別</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label>配信サイト:</label>
+            <select id="platformFilter">
+                <option value="all">すべて</option>
+                <option value="netflix">Netflix</option>
+                <option value="unext">U-NEXT</option>
+                <option value="viki">Viki</option>
+                <option value="gaga">GagaOOLala</option>
+            </select>
+        </div>
+
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="作品名・俳優名で検索...">
+        </div>
+    </div>
+
+    <section class="works-section">
+        <div class="results-info" id="resultsInfo"></div>
+        <div class="works-grid" id="worksGrid"></div>
+    </section>
+
+    <!-- AdSense広告エリア（最下部） -->
+    <div class="ad-space horizontal">
+        AdSense 横長広告 (728×90 / 320×100)
+    </div>
+
+    <!-- カレンダーセクション -->
+    <div class="calendar-section">
+        <div class="calendar-header">
+            <div>
+                <span class="calendar-title">📅 選択した作品の配信予定</span>
+                <span class="selected-count" id="selectedCount">0件</span>
+            </div>
+            <button class="clear-btn" id="clearBtn">すべてクリア</button>
+        </div>
+        <div class="calendar-list" id="calendarList">
+            <div class="empty-calendar">作品を選択すると、配信スケジュールがここに表示されます</div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-links">
+            <a href="news-page.html">お知らせ</a>
+            <a href="privacy-policy.html">プライバシーポリシー</a>
+            <a href="contact-page.html">お問い合わせ</a>
+        </div>
+        <div class="footer-copyright">
+            © 2026 Asia BL Archive
+        </div>
+    </footer>
+
+    <!-- data/works.jsを読み込む -->
+    <script src="data/works.js"></script>
+    
+    <script>
+        // グローバル変数
+        let works = [];
+        let currentCountry = 'all';
+        let currentYear = '2026';
+        let currentMonth = '2';
+        let currentPlatform = 'all';
+        let currentSearchQuery = '';
+        let selectedWorks = new Set();
+
+        // data/works.jsからデータを取得
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof allWorks !== 'undefined') {
+                // データ構造を変換
+                works = allWorks.map(work => ({
+                    id: work.id || Math.random(),
+                    title: work.Title_JP || work.Title_EN || '無題',
+                    country: mapCountry(work.Country),
+                    platform: mapPlatform(work.Platform),
+                    nextAir: work.Year ? `${work.Year}年` : '未定',
+                    thumbnail: '作品画像',
+                    detailUrl: '/works/' + (work.Title_EN || '').toLowerCase().replace(/\s+/g, '-'),
+                    actors: [work.Cast1, work.Cast2].filter(Boolean),
+                    viewCount: Math.floor(Math.random() * 5000) + 500
+                }));
+                
+                console.log(`${works.length}件の作品を読み込みました`);
+                renderRanking();
+                renderWorks();
+            } else {
+                console.error('data/works.jsが読み込まれていません');
+            }
+        });
+
+        // 国名マッピング
+        function mapCountry(country) {
+            const mapping = {
+                'Korea': 'korea',
+                'Thailand': 'thailand',
+                'Taiwan': 'taiwan',
+                'China': 'china',
+                'Japan': 'japan'
+            };
+            return mapping[country] || country.toLowerCase();
+        }
+
+        // プラットフォームマッピング
+        function mapPlatform(platform) {
+            if (!platform) return 'その他';
+            const platformMap = {
+                'Netflix': 'netflix',
+                'iQIYI': 'iqiyi',
+                'Viki': 'viki',
+                'GMMTV': 'gmmtv',
+                'GagaOOLala': 'gaga',
+                'U-NEXT': 'unext',
+                'Viu': 'viu'
+            };
+            const first = platform.split('/')[0].trim();
+            return platformMap[first] || first.toLowerCase();
+        }
+
+        const platformNames = {
+            netflix: 'Netflix',
+            unext: 'U-NEXT',
+            viki: 'Viki',
+            gaga: 'GagaOOLala',
+            iqiyi: 'iQIYI',
+            gmmtv: 'GMMTV'
+        };
+
+        function renderRanking() {
+            const list = document.getElementById('rankingScroll');
+            const sortedWorks = works.slice().sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0)).slice(0, 10);
+            
+            list.innerHTML = sortedWorks.map((work, index) => `
+                <div class="ranking-card">
+                    <div class="ranking-number">${index + 1}</div>
+                    <div class="ranking-thumbnail">${work.thumbnail}</div>
+                    <div class="ranking-title">${work.title}</div>
+                    <div class="ranking-meta">${work.nextAir} | ${work.viewCount} views</div>
+                </div>
+            `).join('');
+        }
+
+        function renderWorks() {
+            const selectedWorksData = works.filter(w => selectedWorks.has(w.id))
+                .sort((a, b) => new Date(a.nextAir) - new Date(b.nextAir));
+            
+            list.innerHTML = selectedWorksData.map(work => `
+                <div class="calendar-item">
+                    <div class="calendar-date">${formatDate(work.nextAir)}</div>
+                    <div class="calendar-work-title">${work.title}</div>
+                    <div class="calendar-platform">${platformNames[work.platform]}</div>
+                </div>
+            `).join('');
+
+            if (selectedWorksData.length === 0) {
+                list.innerHTML = '<div class="empty-calendar">作品を選択すると、配信スケジュールがここに表示されます</div>';
+                return;
+            }
+        }
+
+        function formatDate(dateStr) {
+            return dateStr;
+        }
+
+        document.querySelectorAll('.country-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.country-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentCountry = tab.dataset.country;
+                renderWorks();
+            });
+        });
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            currentSearchQuery = e.target.value;
+            renderWorks();
+        });
+
+        document.getElementById('yearFilter').addEventListener('change', (e) => {
+            currentYear = e.target.value;
+            renderWorks();
+        });
+
+        document.getElementById('monthFilter').addEventListener('change', (e) => {
+            currentMonth = e.target.value;
+            renderWorks();
+        });
+
+        document.getElementById('platformFilter').addEventListener('change', (e) => {
+            currentPlatform = e.target.value;
+            renderWorks();
+        });
+
+        document.getElementById('clearBtn').addEventListener('click', () => {
+            selectedWorks.clear();
+            saveSelectedWorks();
+            renderWorks();
+        });
+    </script>
+</body>
+</html>

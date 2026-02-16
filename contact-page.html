@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お問い合わせ | Asia BL Archive</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif;
+            background: #f5f5f5;
+            color: #2c2c2c;
+            line-height: 1.8;
+        }
+        
+        header {
+            background: white;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: #2c2c2c;
+            font-family: 'Georgia', 'Yu Mincho', 'Hiragino Mincho ProN', serif;
+            letter-spacing: 1px;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin: 2rem;
+            transition: all 0.3s;
+        }
+        
+        .back-button:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .page-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #2c2c2c;
+        }
+        
+        .page-description {
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+        
+        .form-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .form-group {
+            margin-bottom: 2rem;
+        }
+        
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #2c2c2c;
+        }
+        
+        .required {
+            color: #e74c3c;
+            margin-left: 0.3rem;
+        }
+        
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+        
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .form-hint {
+            font-size: 0.85rem;
+            color: #999;
+            margin-top: 0.3rem;
+        }
+        
+        .submit-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+        
+        .submit-button:hover {
+            background: #5568d3;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        
+        .submit-button:active {
+            transform: translateY(0);
+        }
+        
+        .note-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border-radius: 4px;
+        }
+        
+        .note-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #2c2c2c;
+        }
+        
+        .note-content {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.7;
+        }
+        
+        footer {
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            padding: 2rem;
+            margin-top: 4rem;
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .footer-links a:hover {
+            color: #667eea;
+        }
+        
+        .copyright {
+            color: #999;
+            font-size: 0.85rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .form-container {
+                padding: 1.5rem;
+            }
+            
+            .page-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Asia BL Archive</div>
+    </header>
+
+    <a href="#" class="back-button" onclick="alert('TOPページへ戻る'); return false;">
+        ← TOPに戻る
+    </a>
+
+    <div class="container">
+        <h1 class="page-title">お問い合わせ</h1>
+        <p class="page-description">
+            Asia BL Archiveに関するお問い合わせは、以下のフォームよりお願いいたします。<br>
+            ご入力いただいた内容を確認後、3営業日以内にご返信いたします。
+        </p>
+
+        <div class="note-box">
+            <div class="note-title">📝 お問い合わせの前にご確認ください</div>
+            <div class="note-content">
+                ・作品情報の誤りや追加リクエストもこちらから受け付けております<br>
+                ・返信には3営業日程度お時間をいただく場合があります<br>
+                ・営業・広告に関するお問い合わせはご遠慮ください
+            </div>
+        </div>
+
+        <form class="form-container" id="contactForm" onsubmit="alert('実際にはGoogle Formsなどのフォームサービスと連携します'); return false;">
+            <div class="form-group">
+                <label class="form-label">
+                    お問い合わせ種類<span class="required">*</span>
+                </label>
+                <select class="form-select" required>
+                    <option value="">選択してください</option>
+                    <option value="作品情報の誤り">作品情報の誤りの報告</option>
+                    <option value="作品の追加リクエスト">作品の追加リクエスト</option>
+                    <option value="俳優情報の誤り">俳優情報の誤りの報告</option>
+                    <option value="サイトの不具合">サイトの不具合・バグ報告</option>
+                    <option value="機能の改善提案">機能の改善提案</option>
+                    <option value="その他">その他のお問い合わせ</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    お名前またはニックネーム<span class="required">*</span>
+                </label>
+                <input type="text" class="form-input" placeholder="例: 山田太郎" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    メールアドレス<span class="required">*</span>
+                </label>
+                <input type="email" class="form-input" placeholder="example@email.com" required>
+                <div class="form-hint">返信用のメールアドレスをご入力ください</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    件名<span class="required">*</span>
+                </label>
+                <input type="text" class="form-input" placeholder="例: 「Love in the Air」の配信日が誤っています" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    お問い合わせ内容<span class="required">*</span>
+                </label>
+                <textarea class="form-textarea" placeholder="具体的な内容をご記入ください。作品名や俳優名がある場合は明記してください。" required></textarea>
+                <div class="form-hint">できるだけ詳しくお書きください（作品名、俳優名、URLなど）</div>
+            </div>
+
+            <button type="submit" class="submit-button">送信する</button>
+        </form>
+
+        <div class="note-box" style="margin-top: 2rem;">
+            <div class="note-title">💡 実装時の注意</div>
+            <div class="note-content">
+                実際の運用では、このフォームをGoogle Forms、Typeform、またはFormspreeなどのフォームサービスに置き換えてください。<br><br>
+                <strong>推奨サービス：</strong><br>
+                ・Google Forms（無料、簡単）<br>
+                ・Typeform（デザイン性が高い）<br>
+                ・Formspree（HTMLフォームから直接送信可能）
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-links">
+            <a href="#">TOPページ</a>
+            <a href="#">お知らせ</a>
+            <a href="#">プライバシーポリシー</a>
+            <a href="#">お問い合わせ</a>
+        </div>
+        <div class="copyright">
+            © 2026 Asia BL Archive. All rights reserved.
+        </div>
+    </footer>
+</body>
+</html>

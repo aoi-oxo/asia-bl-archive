@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>俳優詳細 | Asia BL Archive</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif;
+            background: #f5f5f5;
+            color: #2c2c2c;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: white;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: #2c2c2c;
+            font-family: 'Georgia', 'Yu Mincho', 'Hiragino Mincho ProN', serif;
+            letter-spacing: 1px;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin: 2rem;
+            transition: all 0.3s;
+        }
+        
+        .back-button:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+        
+        .actor-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        /* プロフィールヘッダー */
+        .profile-header {
+            background: white;
+            padding: 3rem 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .profile-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .profile-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .profile-photo-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .profile-photo-placeholder svg {
+            width: 80px;
+            height: 80px;
+            fill: white;
+        }
+        
+        .actor-name-ja {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #2c2c2c;
+        }
+        
+        .actor-name-en {
+            font-size: 1.1rem;
+            color: #999;
+            margin-bottom: 1.5rem;
+        }
+        
+        .actor-info {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        .actor-info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        /* SNSリンク */
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        .social-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #666;
+            transition: all 0.3s;
+            font-size: 1.2rem;
+        }
+        
+        .social-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #2c2c2c;
+        }
+        
+        /* 出演作品 */
+        .works-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .work-card {
+            background: white;
+            border: 1px solid #e8e0e8;
+            border-radius: 8px;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .work-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .work-thumbnail {
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .work-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .work-thumbnail-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            opacity: 0.4;
+        }
+        
+        .work-thumbnail-placeholder svg {
+            width: 40px;
+            height: 40px;
+            fill: white;
+        }
+        
+        .work-info {
+            padding: 1rem;
+        }
+        
+        .work-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .work-year {
+            font-size: 0.8rem;
+            color: #999;
+            margin-bottom: 0.3rem;
+        }
+        
+        .work-role {
+            font-size: 0.8rem;
+            color: #667eea;
+            font-weight: 500;
+        }
+        
+        @media (max-width: 768px) {
+            .actor-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Asia BL Archive</div>
+    </header>
+
+    <a href="./index.html" class="back-button">
+        ← TOPに戻る
+    </a>
+
+    <div class="actor-container" id="actorContainer">
+        <!-- プロフィールヘッダー -->
+        <div class="profile-header">
+            <div class="profile-photo" id="profilePhoto"></div>
+            <h1 class="actor-name-ja" id="actorNameJa"></h1>
+            <div class="actor-name-en" id="actorNameEn"></div>
+            <div class="actor-info" id="actorInfo"></div>
+            <div class="social-links" id="socialLinks"></div>
+        </div>
+
+        <!-- プロフィール -->
+        <div class="section">
+            <h2 class="section-title">📝 プロフィール</h2>
+            <p class="bio-text" id="bioText"></p>
+        </div>
+
+        <!-- 出演作品 -->
+        <div class="section">
+            <h2 class="section-title" id="worksTitle">📺 出演作品</h2>
+            <div class="works-grid" id="worksGrid"></div>
+        </div>
+
+    </div>
+    
+    <script src="./data/works.js"></script>
+    <script src="./data/actors.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const actorName = urlParams.get('name');
+
+            let actor = allActors.find(a => a.Name_JP === actorName);
+
+            if (!actor && actorName) {
+                const lowerCaseActorName = actorName.toLowerCase();
+                actor = allActors.find(a => 
+                    (a.Name_JP && a.Name_JP.toLowerCase().includes(lowerCaseActorName)) ||
+                    (a.Name_EN && a.Name_EN.toLowerCase().includes(lowerCaseActorName)) ||
+                    (a.Name_Native && a.Name_Native.toLowerCase().includes(lowerCaseActorName))
+                );
+            }
+
+            if (actor) {
+                renderActorDetails(actor);
+                renderAppearedWorks(actor);
+} else {
+                const actorContainer = document.getElementById('actorContainer');
+                actorContainer.innerHTML = `
+                    <div class="section" style="text-align: center;">
+                        <h2 class="section-title">Update File</h2>
+                    </div>
+                `;
+                document.title = 'Update File | Asia BL Archive';
+            }
+        });
+
+        function renderActorDetails(actor) {
+            document.title = `${actor.Name_JP} - 俳優詳細 | Asia BL Archive`;
+            const countryFlags = {
+                '韓国': '🇰🇷 韓国',
+                'タイ': '🇹🇭 タイ',
+                '台湾': '🇹🇼 台湾',
+                '中国': '🇨🇳 中国',
+                '日本': '🇯🇵 日本',
+                'フィリピン': '🇵🇭 フィリピン'
+            };
+
+            // Photo
+            const profilePhoto = document.getElementById('profilePhoto');
+            if (actor.Image_URL) {
+                profilePhoto.innerHTML = `<img src="${actor.Image_URL}" alt="${actor.Name_JP}">`;
+            } else {
+                profilePhoto.innerHTML = `
+                    <div class="profile-photo-placeholder">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                    </div>
+                `;
+            }
+
+            // Names
+            document.getElementById('actorNameJa').textContent = actor.Name_JP;
+            document.getElementById('actorNameEn').textContent = actor.Name_EN;
+
+            // Basic Info
+            const actorInfo = document.getElementById('actorInfo');
+let infoHtml = `<div class="actor-info-item">${countryFlags[actor.Nationality] || actor.Nationality}</div>`;
+            if (actor.Birthdate) {
+                const birthYear = new Date(actor.Birthdate).getFullYear();
+                if (birthYear > 1900) {
+                    const age = new Date().getFullYear() - birthYear;
+                    infoHtml += `<div class="actor-info-item">${actor.Birthdate}（${age}歳）</div>`;
+                } else {
+                    infoHtml += `<div class="actor-info-item">${actor.Birthdate}</div>`;
+                }
+            }
+            if (actor.Height) {
+                infoHtml += `<div class="actor-info-item">${actor.Height}cm</div>`;
+            }
+            actorInfo.innerHTML = infoHtml;
+
+            // Social Links
+            const socialLinks = document.getElementById('socialLinks');
+            let socialHTML = '';
+            if(actor.Instagram_URL) {
+                socialHTML += `<a href="${actor.Instagram_URL}" class="social-btn" target="_blank" title="Instagram">📷</a>`;
+            }
+            if(actor.Twitter_URL) {
+                socialHTML += `<a href="${actor.Twitter_URL}" class="social-btn" target="_blank" title="Twitter">𝕏</a>`;
+            }
+            if(actor.TikTok_URL) {
+                socialHTML += `<a href="${actor.TikTok_URL}" class="social-btn" target="_blank" title="TikTok">🎵</a>`;
+            }
+            socialLinks.innerHTML = socialHTML;
+
+            // Bio
+document.getElementById('bioText').textContent = actor.Profile_Text;
+        }
+
+        function renderAppearedWorks(actor) {
+            const appearedWorks = allWorks.filter(work => work.cast.some(c => c.actorName === actor.Name_JP));
+            
+            document.getElementById('worksTitle').textContent = `📺 出演作品（${appearedWorks.length}作品）`;
+
+            const worksGrid = document.getElementById('worksGrid');
+            if(appearedWorks.length > 0) {
+                worksGrid.innerHTML = appearedWorks.map(work => {
+                    const castInfo = work.cast.find(c => c.actorName === actor.Name_JP);
+                    return \`
+                        <a href="./work-detail.html?id=${work.id}" class="work-card">
+                            <div class="work-thumbnail">
+                                ${work.thumbnail ? `<img src="${work.thumbnail}" alt="${work.title}">` : `
+                                    <div class="work-thumbnail-placeholder">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+                                        <div>${work.title}</div>
+                                    </div>`}
+                            </div>
+                            <div class="work-info">
+                                <div class="work-title">${work.title}</div>
+                                <div class="work-year">${work.year}年</div>
+                                <div class="work-role">${castInfo.role}</div>
+                            </div>
+                        </a>
+                    \`;
+                }).join('');
+            } else if (actor.Representative_Works) {
+                 worksGrid.innerHTML = `<p>${actor.Representative_Works}</p>`;
+            }
+        }
+
+    </script>
+</body>
+</html>

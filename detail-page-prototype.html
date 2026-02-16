@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love in the Air - 作品詳細 | Asia BL Archive</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif;
+            background: #f5f5f5;
+            color: #2c2c2c;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: white;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: #2c2c2c;
+            font-family: 'Georgia', 'Yu Mincho', 'Hiragino Mincho ProN', serif;
+            letter-spacing: 1px;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin: 2rem;
+            transition: all 0.3s;
+        }
+        
+        .back-button:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+        
+        .detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .main-visual {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .main-visual img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .main-visual-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            opacity: 0.3;
+        }
+        
+        .main-visual-placeholder svg {
+            width: 80px;
+            height: 80px;
+            fill: white;
+        }
+        
+        .work-header {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .work-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #2c2c2c;
+        }
+        
+        .work-meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        .work-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #2c2c2c;
+        }
+        
+        /* 配信プラットフォーム */
+        .platform-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .platform-group:last-child {
+            margin-bottom: 0;
+        }
+        
+        .platform-label {
+            font-size: 0.85rem;
+            color: #999;
+            margin-bottom: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 0.8rem;
+        }
+        
+        .platform-btn {
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .platform-btn.available {
+            background: #667eea;
+            color: white;
+        }
+        
+        .platform-btn.available:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        
+        .platform-btn.upcoming {
+            background: #f0f0f0;
+            color: #666;
+        }
+        
+        .platform-btn.upcoming:hover {
+            background: #e8e8e8;
+        }
+        
+        .platform-name {
+            font-weight: 600;
+        }
+        
+        .platform-status {
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+        
+        /* カレンダーボタン */
+        .calendar-btn {
+            width: 100%;
+            padding: 1rem;
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .calendar-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        /* あらすじ */
+        .synopsis {
+            line-height: 1.8;
+            color: #444;
+        }
+        
+        /* キャスト */
+        .cast-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .cast-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s;
+        }
+        
+        .cast-item:hover {
+            background: #f0f0f0;
+            transform: translateX(4px);
+        }
+        
+        .cast-photo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ccc;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .cast-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .cast-photo-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .cast-photo-placeholder svg {
+            width: 35px;
+            height: 35px;
+            fill: white;
+        }
+        
+        .cast-name {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .cast-arrow {
+            margin-left: auto;
+            color: #999;
+        }
+        
+        /* 配信スケジュール */
+        .schedule-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        
+        .schedule-item {
+            display: grid;
+            grid-template-columns: 60px 1fr 140px;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            align-items: center;
+        }
+        
+        .episode-num {
+            font-weight: 700;
+            color: #667eea;
+            font-size: 0.9rem;
+        }
+        
+        .episode-title {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .episode-date {
+            text-align: right;
+            color: #666;
+            font-size: 0.85rem;
+        }
+        
+        /* 関連作品 */
+        .related-works {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .related-card {
+            background: white;
+            border: 1px solid #e8e0e8;
+            border-radius: 8px;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .related-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .related-thumbnail {
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .related-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .related-thumbnail-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            opacity: 0.4;
+        }
+        
+        .related-thumbnail-placeholder svg {
+            width: 40px;
+            height: 40px;
+            fill: white;
+        }
+        
+        .related-info {
+            padding: 1rem;
+        }
+        
+        .related-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .related-meta {
+            font-size: 0.8rem;
+            color: #999;
+        }
+        
+        @media (max-width: 768px) {
+            .detail-container {
+                padding: 1rem;
+            }
+            
+            .main-visual {
+                height: 250px;
+            }
+            
+            .work-title {
+                font-size: 1.5rem;
+            }
+            
+            .platform-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .schedule-item {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+            
+            .episode-date {
+                text-align: left;
+            }
+            
+            .related-works {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Asia BL Archive</div>
+    </header>
+
+    <a href="#" class="back-button" onclick="alert('TOPページへ戻る'); return false;">
+        ← TOPに戻る
+    </a>
+
+    <div class="detail-container">
+        <!-- メインビジュアル -->
+        <div class="main-visual">
+            <!-- 画像がある場合: <img src="path/to/main-visual.jpg" alt="Love in the Air"> -->
+            <!-- 画像がない場合: -->
+            <div class="main-visual-placeholder">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                </svg>
+                <div>メインビジュアル</div>
+            </div>
+        </div>
+
+        <!-- 作品ヘッダー -->
+        <div class="work-header">
+            <h1 class="work-title">Love in the Air</h1>
+            <div class="work-meta">
+                <div class="work-meta-item">
+                    🇹🇭 タイ
+                </div>
+                <div class="work-meta-item">
+                    全12話
+                </div>
+                <div class="work-meta-item">
+                    ロマンス・青春
+                </div>
+            </div>
+        </div>
+
+        <!-- 配信プラットフォーム -->
+        <div class="section">
+            <h2 class="section-title">📺 どこで観れる？</h2>
+            
+            <div class="platform-group">
+                <div class="platform-label">配信中</div>
+                <div class="platform-grid">
+                    <a href="#" class="platform-btn available" onclick="alert('Netflixへ（アフィリエイトリンク）'); return false;">
+                        <div class="platform-name">Netflix</div>
+                        <div class="platform-status">✓ 配信中</div>
+                    </a>
+                    <a href="#" class="platform-btn available" onclick="alert('U-NEXTへ（アフィリエイトリンク）'); return false;">
+                        <div class="platform-name">U-NEXT</div>
+                        <div class="platform-status">✓ 配信中</div>
+                    </a>
+                    <a href="#" class="platform-btn available" onclick="alert('Vikiへ（アフィリエイトリンク）'); return false;">
+                        <div class="platform-name">Viki</div>
+                        <div class="platform-status">✓ 配信中</div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="platform-group">
+                <div class="platform-label">配信予定</div>
+                <div class="platform-grid">
+                    <a href="#" class="platform-btn upcoming" onclick="alert('WeTVへ（アフィリエイトリンク）'); return false;">
+                        <div class="platform-name">WeTV</div>
+                        <div class="platform-status">2月20日配信開始</div>
+                    </a>
+                    <a href="#" class="platform-btn upcoming" onclick="alert('GagaOOLalaへ（アフィリエイトリンク）'); return false;">
+                        <div class="platform-name">GagaOOLala</div>
+                        <div class="platform-status">3月1日配信開始</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- カレンダー追加ボタン -->
+        <div class="section">
+            <button class="calendar-btn" onclick="alert('カレンダーに追加されました！')">
+                📅 カレンダーに追加する
+            </button>
+        </div>
+
+        <!-- あらすじ -->
+        <div class="section">
+            <h2 class="section-title">あらすじ</h2>
+            <p class="synopsis">
+                レーサーのペイとバイク修理工のレイン。二人は偶然の出会いから恋に落ちる。
+                しかし、ペイの過去のトラウマが二人の関係に影を落とす。
+                果たして二人は困難を乗り越え、真の愛を見つけることができるのか？
+            </p>
+        </div>
+
+        <!-- キャスト -->
+        <div class="section">
+            <h2 class="section-title">キャスト</h2>
+            <div class="cast-list">
+                <a href="#" class="cast-item" onclick="alert('ボス・チャイクモンのページへ'); return false;">
+                    <div class="cast-photo">
+                        <div class="cast-photo-placeholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            </svg>
+                        </div>
+                        <!-- 画像がある場合: <img src="path/to/photo.jpg" alt="ボス・チャイクモン"> -->
+                    </div>
+                    <div class="cast-name">ボス・チャイクモン</div>
+                    <div class="cast-arrow">→</div>
+                </a>
+                <a href="#" class="cast-item" onclick="alert('ノエル・ニティのページへ'); return false;">
+                    <div class="cast-photo">
+                        <div class="cast-photo-placeholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="cast-name">ノエル・ニティ</div>
+                    <div class="cast-arrow">→</div>
+                </a>
+                <a href="#" class="cast-item" onclick="alert('フォート・ティティポンのページへ'); return false;">
+                    <div class="cast-photo">
+                        <div class="cast-photo-placeholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="cast-name">フォート・ティティポン</div>
+                    <div class="cast-arrow">→</div>
+                </a>
+                <a href="#" class="cast-item" onclick="alert('ピート・ナッタポンのページへ'); return false;">
+                    <div class="cast-photo">
+                        <div class="cast-photo-placeholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="cast-name">ピート・ナッタポン</div>
+                    <div class="cast-arrow">→</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- 配信スケジュール -->
+        <div class="section">
+            <h2 class="section-title">配信スケジュール</h2>
+            <div class="schedule-list">
+                <div class="schedule-item">
+                    <div class="episode-num">第1話</div>
+                    <div class="episode-title">運命の出会い</div>
+                    <div class="episode-date">2月12日（水）22:00</div>
+                </div>
+                <div class="schedule-item">
+                    <div class="episode-num">第2話</div>
+                    <div class="episode-title">初めてのデート</div>
+                    <div class="episode-date">2月19日（水）22:00</div>
+                </div>
+                <div class="schedule-item">
+                    <div class="episode-num">第3話</div>
+                    <div class="episode-title">過去の影</div>
+                    <div class="episode-date">2月26日（水）22:00</div>
+                </div>
+                <div class="schedule-item">
+                    <div class="episode-num">第4話</div>
+                    <div class="episode-title">すれ違い</div>
+                    <div class="episode-date">3月5日（水）22:00</div>
+                </div>
+                <div class="schedule-item">
+                    <div class="episode-num">第5話</div>
+                    <div class="episode-title">告白</div>
+                    <div class="episode-date">3月12日（水）22:00</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 関連作品 -->
+        <div class="section">
+            <h2 class="section-title">こちらもおすすめ</h2>
+            <div class="related-works" id="relatedWorks">
+                <!-- JavaScriptで自動生成 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // 自動おすすめ機能（ジャンルベース）
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        
+        // 全作品データ（実際はAPIやCMSから取得）
+        const allWorks = [
+            {
+                id: 1,
+                title: "Love in the Air",
+                country: "thailand",
+                platform: "netflix",
+                genres: ["ロマンス", "青春"],
+                thumbnail: "タイBLドラマ"
+            },
+            {
+                id: 2,
+                title: "Bad Buddy",
+                country: "thailand",
+                platform: "netflix",
+                genres: ["ロマンス", "青春", "学園"],
+                thumbnail: "タイBLドラマ"
+            },
+            {
+                id: 3,
+                title: "Semantic Error",
+                country: "korea",
+                platform: "unext",
+                genres: ["ロマンス", "学園"],
+                thumbnail: "韓国BLドラマ"
+            },
+            {
+                id: 4,
+                title: "History5: Love in the Future",
+                country: "taiwan",
+                platform: "viki",
+                genres: ["ロマンス", "SF"],
+                thumbnail: "台湾BLドラマ"
+            },
+            {
+                id: 5,
+                title: "My School President",
+                country: "thailand",
+                platform: "gaga",
+                genres: ["ロマンス", "青春", "学園", "音楽"],
+                thumbnail: "タイBLドラマ"
+            },
+            {
+                id: 6,
+                title: "陳情令",
+                country: "china",
+                platform: "unext",
+                genres: ["ファンタジー", "時代劇", "アクション"],
+                thumbnail: "中国BLドラマ"
+            },
+            {
+                id: 7,
+                title: "KinnPorsche",
+                country: "thailand",
+                platform: "netflix",
+                genres: ["アクション", "サスペンス", "ロマンス"],
+                thumbnail: "タイBLドラマ"
+            },
+            {
+                id: 8,
+                title: "Blueming",
+                country: "korea",
+                platform: "viki",
+                genres: ["ロマンス", "青春"],
+                thumbnail: "韓国BLドラマ"
+            }
+        ];
+
+        const countryFlags = {
+            thailand: "🇹🇭 タイ",
+            taiwan: "🇹🇼 台湾",
+            korea: "🇰🇷 韓国",
+            china: "🇨🇳 中国",
+            japan: "🇯🇵 日本"
+        };
+
+        const platformNames = {
+            netflix: "Netflix",
+            unext: "U-NEXT",
+            viki: "Viki",
+            gaga: "GagaOOLala",
+            wetv: "WeTV"
+        };
+
+        // 現在の作品
+        const currentWork = {
+            id: 1,
+            title: "Love in the Air",
+            genres: ["ロマンス", "青春"]
+        };
+
+        // ジャンルの一致度を計算
+        function calculateGenreMatch(work) {
+            const matchCount = work.genres.filter(genre => 
+                currentWork.genres.includes(genre)
+            ).length;
+            return matchCount;
+        }
+
+        // おすすめ作品を生成
+        function generateRecommendations() {
+            // 現在の作品を除外
+            const candidates = allWorks.filter(work => work.id !== currentWork.id);
+            
+            // ジャンル一致度でソート
+            const sorted = candidates
+                .map(work => ({
+                    ...work,
+                    matchScore: calculateGenreMatch(work)
+                }))
+                .filter(work => work.matchScore > 0) // 1つ以上ジャンルが一致
+                .sort((a, b) => b.matchScore - a.matchScore);
+            
+            // 上位4件を取得
+            const recommendations = sorted.slice(0, 4);
+            
+            // HTMLを生成
+            const container = document.getElementById('relatedWorks');
+            
+            if (recommendations.length === 0) {
+                container.innerHTML = '<p style="color: #999;">関連作品が見つかりませんでした</p>';
+                return;
+            }
+            
+            container.innerHTML = recommendations.map(work => `
+                <a href="#" class="related-card" onclick="alert('${work.title}の詳細ページへ'); return false;">
+                    <div class="related-thumbnail">
+                        <div class="related-thumbnail-placeholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                            </svg>
+                            <div>${work.thumbnail}</div>
+                        </div>
+                    </div>
+                    <div class="related-info">
+                        <div class="related-title">${work.title}</div>
+                        <div class="related-meta">${countryFlags[work.country]} | ${platformNames[work.platform]}</div>
+                    </div>
+                </a>
+            `).join('');
+        }
+
+        // ページ読み込み時に実行
+        generateRecommendations();
+    </script>
+</body>
+</html>

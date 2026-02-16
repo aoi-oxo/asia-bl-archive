@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お知らせ | Asia BL Archive</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif;
+            background: #f5f5f5;
+            color: #2c2c2c;
+            line-height: 1.8;
+        }
+        
+        header {
+            background: white;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: #2c2c2c;
+            font-family: 'Georgia', 'Yu Mincho', 'Hiragino Mincho ProN', serif;
+            letter-spacing: 1px;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin: 2rem;
+            transition: all 0.3s;
+        }
+        
+        .back-button:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .page-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #667eea;
+            color: #2c2c2c;
+        }
+        
+        .news-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .news-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-left: 4px solid #667eea;
+        }
+        
+        .news-date {
+            font-size: 0.85rem;
+            color: #999;
+            margin-bottom: 0.5rem;
+        }
+        
+        .news-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: #2c2c2c;
+        }
+        
+        .news-content {
+            color: #444;
+            line-height: 1.8;
+        }
+        
+        .news-tag {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            background: #f0f0f0;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-right: 0.5rem;
+            margin-top: 0.5rem;
+            color: #667eea;
+            font-weight: 500;
+        }
+        
+        footer {
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            padding: 2rem;
+            margin-top: 4rem;
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .footer-links a:hover {
+            color: #667eea;
+        }
+        
+        .copyright {
+            color: #999;
+            font-size: 0.85rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .page-title {
+                font-size: 1.5rem;
+            }
+            
+            .news-item {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Asia BL Archive</div>
+    </header>
+
+    <a href="#" class="back-button" onclick="alert('TOPページへ戻る'); return false;">
+        ← TOPに戻る
+    </a>
+
+    <div class="container">
+        <h1 class="page-title">📢 お知らせ</h1>
+
+        <div class="news-list">
+            <div class="news-item">
+                <div class="news-date">2026年2月11日</div>
+                <div class="news-title">サイトをリニューアルしました</div>
+                <div class="news-content">
+                    Asia BL Archiveを全面リニューアルしました。作品検索機能の強化、俳優名での検索対応、人気作品ランキング表示など、より使いやすくなりました。今後ともよろしくお願いいたします。
+                </div>
+                <span class="news-tag">サイト更新</span>
+            </div>
+
+            <div class="news-item">
+                <div class="news-date">2026年2月10日</div>
+                <div class="news-title">俳優詳細ページを追加しました</div>
+                <div class="news-content">
+                    俳優ごとの出演作品一覧、プロフィール情報、イベント情報などを確認できる俳優詳細ページを追加しました。作品詳細ページのキャスト名をクリックすることで、各俳優のページに移動できます。
+                </div>
+                <span class="news-tag">新機能</span>
+            </div>
+
+            <div class="news-item">
+                <div class="news-date">2026年2月5日</div>
+                <div class="news-title">2月配信予定の新作BLドラマ情報を追加</div>
+                <div class="news-content">
+                    2月配信予定のタイBLドラマ、韓国BLドラマ、台湾BLドラマの情報を追加しました。カレンダー機能を使って配信日をチェックしてください。
+                </div>
+                <span class="news-tag">作品追加</span>
+            </div>
+
+            <div class="news-item">
+                <div class="news-date">2026年1月15日</div>
+                <div class="news-title">Asia BL Archiveをオープンしました</div>
+                <div class="news-content">
+                    アジアのBLドラマ情報をまとめたデータベースサイト「Asia BL Archive」をオープンしました。配信サイトごとの作品検索、カレンダー機能など、BLドラマファンに便利な機能を提供していきます。
+                </div>
+                <span class="news-tag">サイト開設</span>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-links">
+            <a href="#">TOPページ</a>
+            <a href="#">お知らせ</a>
+            <a href="#">プライバシーポリシー</a>
+            <a href="#">お問い合わせ</a>
+        </div>
+        <div class="copyright">
+            © 2026 Asia BL Archive. All rights reserved.
+        </div>
+    </footer>
+</body>
+</html>

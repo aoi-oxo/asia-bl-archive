@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ページネーション - パターンC フル機能型</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif;
+            background: #f5f5f5;
+            color: #2c2c2c;
+            line-height: 1.6;
+            padding: 3rem 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #2c2c2c;
+            font-size: 1.8rem;
+            font-weight: 400;
+        }
+
+        .demo-info {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border-left: 4px solid #667eea;
+        }
+
+        .demo-info h2 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #667eea;
+        }
+
+        .demo-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* ページネーション - パターンC フル機能型 */
+        .pagination-wrapper {
+            margin: 3rem 0;
+        }
+
+        .pagination-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            padding: 1.5rem;
+            background: #fafafa;
+            border-radius: 12px;
+        }
+
+        .page-btn {
+            padding: 0.7rem 1.4rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: white;
+            color: #2c2c2c;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .page-btn:hover:not(:disabled) {
+            border-color: #667eea;
+            color: #667eea;
+            background: #f5f7ff;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(102, 126, 234, 0.2);
+        }
+
+        .page-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .page-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .page-numbers {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .page-num {
+            min-width: 44px;
+            height: 44px;
+            padding: 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: white;
+            color: #2c2c2c;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .page-num:hover {
+            border-color: #667eea;
+            color: #667eea;
+            background: #f5f7ff;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(102, 126, 234, 0.2);
+        }
+
+        .page-num.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .dots {
+            padding: 0 0.5rem;
+            color: #999;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .pagination-info {
+            text-align: center;
+            color: #666;
+            font-size: 0.95rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .pagination-info strong {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        /* ページ状態の説明 */
+        .state-examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .state-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .state-card h3 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+
+        .state-card p {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        /* モバイル対応 */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .pagination {
+                gap: 0.3rem;
+                padding: 1rem;
+            }
+            
+            .page-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.85rem;
+            }
+            
+            .page-num {
+                min-width: 38px;
+                height: 38px;
+                font-size: 0.85rem;
+            }
+            
+            /* モバイルでは表示するページ数を減らす */
+            .page-numbers {
+                gap: 0.2rem;
+            }
+
+            .state-examples {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* テストコントロール */
+        .test-controls {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .test-controls h3 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: #2c2c2c;
+        }
+
+        .test-controls button {
+            padding: 0.7rem 1.5rem;
+            margin: 0.3rem;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            background: white;
+            color: #667eea;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .test-controls button:hover {
+            background: #667eea;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📄 ページネーション - パターンC（フル機能型）</h1>
+
+        <div class="demo-info">
+            <h2>✨ 特徴</h2>
+            <p>• 周辺5ページが常に表示され、素早くジャンプ可能</p>
+            <p>• 最初/最後へのボタンで両端にワンクリックで移動</p>
+            <p>• ホバー時のアニメーションで操作感が向上</p>
+            <p>• グラデーションでアクティブページを強調</p>
+        </div>
+
+        <div class="test-controls">
+            <h3>🎮 テスト用コントロール</h3>
+            <button onclick="testPage(1)">1ページ目に移動</button>
+            <button onclick="testPage(15)">中間ページ（15）に移動</button>
+            <button onclick="testPage(38)">最終ページ（38）に移動</button>
+            <button onclick="testPage(Math.floor(Math.random() * 38) + 1)">ランダム移動</button>
+        </div>
+
+        <div class="pagination-wrapper">
+            <div class="pagination-container">
+                <div class="pagination" id="pagination"></div>
+                <div class="pagination-info" id="paginationInfo"></div>
+            </div>
+        </div>
+
+        <div class="state-examples">
+            <div class="state-card">
+                <h3>🔹 1ページ目の状態</h3>
+                <p>• 「最初へ」と「← 前」ボタンが無効化</p>
+                <p>• 1が強調表示（グラデーション背景）</p>
+                <p>• 「次 →」と「最後へ」ボタンが有効</p>
+            </div>
+
+            <div class="state-card">
+                <h3>🔹 中間ページの状態</h3>
+                <p>• すべてのボタンが有効</p>
+                <p>• 現在ページの前後2ページが表示</p>
+                <p>• 省略記号（...）で範囲外を表現</p>
+            </div>
+
+            <div class="state-card">
+                <h3>🔹 最終ページの状態</h3>
+                <p>• 「次 →」と「最後へ」ボタンが無効化</p>
+                <p>• 最後のページが強調表示</p>
+                <p>• 「← 前」と「最初へ」ボタンが有効</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ページネーション設定
+        let currentPage = 1;
+        let totalPages = 38;
+        let totalItems = 750;
+        let itemsPerPage = 20;
+
+        // ページネーションを生成
+        function createPagination() {
+            const pagination = document.getElementById('pagination');
+            const paginationInfo = document.getElementById('paginationInfo');
+            
+            let html = '';
+            
+            // 最初へボタン
+            html += `<button class="page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="goToPage(1)">最初へ</button>`;
+            
+            // 前へボタン
+            html += `<button class="page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="goToPage(${currentPage - 1})">← 前</button>`;
+            
+            // ページ番号
+            html += '<div class="page-numbers">';
+            
+            // ページ番号の表示ロジック
+            const maxVisiblePages = 5;
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPages, currentPage + 2);
+            
+            // 最初のページは常に表示
+            if (startPage > 1) {
+                html += `<button class="page-num" onclick="goToPage(1)">1</button>`;
+                if (startPage > 2) {
+                    html += '<span class="dots">...</span>';
+                }
+            }
+            
+            // 中間のページ番号
+            for (let i = startPage; i <= endPage; i++) {
+                html += `<button class="page-num ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+            }
+            
+            // 最後のページは常に表示
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    html += '<span class="dots">...</span>';
+                }
+                html += `<button class="page-num" onclick="goToPage(${totalPages})">${totalPages}</button>`;
+            }
+            
+            html += '</div>';
+            
+            // 次へボタン
+            html += `<button class="page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="goToPage(${currentPage + 1})">次 →</button>`;
+            
+            // 最後へボタン
+            html += `<button class="page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="goToPage(${totalPages})">最後へ</button>`;
+            
+            pagination.innerHTML = html;
+            
+            // 表示件数情報
+            const startItem = (currentPage - 1) * itemsPerPage + 1;
+            const endItem = Math.min(currentPage * itemsPerPage, totalItems);
+            paginationInfo.innerHTML = `全<strong>${totalItems}</strong>件中 <strong>${startItem}〜${endItem}</strong>件を表示（ページ <strong>${currentPage}</strong> / <strong>${totalPages}</strong>）`;
+        }
+
+        // ページ移動
+        function goToPage(page) {
+            if (page < 1 || page > totalPages) return;
+            currentPage = page;
+            createPagination();
+            
+            // スムーズスクロール
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // 視覚的フィードバック
+            console.log(`📄 ${page}ページ目に移動しました`);
+        }
+
+        // テスト用関数
+        function testPage(page) {
+            goToPage(page);
+        }
+
+        // 初期表示
+        createPagination();
+
+        // キーボードショートカット
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                goToPage(currentPage - 1);
+            } else if (e.key === 'ArrowRight') {
+                goToPage(currentPage + 1);
+            } else if (e.key === 'Home') {
+                goToPage(1);
+            } else if (e.key === 'End') {
+                goToPage(totalPages);
+            }
+        });
+    </script>
+</body>
+</html>

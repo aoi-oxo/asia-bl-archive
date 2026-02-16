@@ -648,6 +648,120 @@
             color: #999;
             font-size: 0.75rem;
         }
+
+        /* ページネーション - パターンC フル機能型 */
+        .pagination-wrapper {
+            margin: 3rem 0;
+        }
+
+        .pagination-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            padding: 1.5rem;
+            background: #fafafa;
+            border-radius: 12px;
+        }
+
+        .page-btn {
+            padding: 0.7rem 1.4rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: white;
+            color: #2c2c2c;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .page-btn:hover:not(:disabled) {
+            border-color: #667eea;
+            color: #667eea;
+            background: #f5f7ff;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(102, 126, 234, 0.2);
+        }
+
+        .page-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .page-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .page-numbers {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .page-num {
+            min-width: 44px;
+            height: 44px;
+            padding: 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: white;
+            color: #2c2c2c;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .page-num:hover {
+            border-color: #667eea;
+            color: #667eea;
+            background: #f5f7ff;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(102, 126, 234, 0.2);
+        }
+
+        .page-num.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .dots {
+            padding: 0 0.5rem;
+            color: #999;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .pagination-info {
+            text-align: center;
+            color: #666;
+            font-size: 0.95rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .pagination-info strong {
+            color: #667eea;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
@@ -706,10 +820,10 @@
         <div class="control-group">
             <label>配信年:</label>
             <select id="yearFilter">
-                <option value="all">すべて</option>
+                <option value="all" selected>すべて</option>
                 <option value="2024">2024年</option>
                 <option value="2025">2025年</option>
-                <option value="2026" selected>2026年</option>
+                <option value="2026">2026年</option>
                 <option value="2027">2027年</option>
             </select>
         </div>
@@ -717,9 +831,9 @@
         <div class="control-group">
             <label>配信月:</label>
             <select id="monthFilter">
-                <option value="all">すべて</option>
+                <option value="all" selected>すべて</option>
                 <option value="1">1月</option>
-                <option value="2" selected>2月</option>
+                <option value="2">2月</option>
                 <option value="3">3月</option>
                 <option value="4">4月</option>
                 <option value="5">5月</option>
@@ -763,6 +877,12 @@
     <section class="works-section">
         <div class="results-info" id="resultsInfo"></div>
         <div class="works-grid" id="worksGrid"></div>
+        <div class="pagination-wrapper">
+            <div class="pagination-container">
+                <div class="pagination" id="pagination"></div>
+                <div class="pagination-info" id="paginationInfo"></div>
+            </div>
+        </div>
     </section>
 
     <!-- AdSense広告エリア（最下部） -->
@@ -805,61 +925,44 @@
         // ページ読み込み時にデータを変換
         if (typeof allWorks !== 'undefined') {
             works = allWorks.map((w, i) => {
-                // 国名マッピング
                 const countryMap = {
-                    'Korea': 'korea',
-                    'Thailand': 'thailand',
-                    'Taiwan': 'taiwan',
-                    'China': 'china',
-                    'Japan': 'japan',
-                    'Philippines': 'philippines'
+                    'Korea': 'korea', 'South Korea': 'korea', 'Thailand': 'thailand', 'Taiwan': 'taiwan', 'China': 'china', 'Japan': 'japan', 'Philippines': 'philippines'
                 };
                 const country = countryMap[w.Country] || (w.Country || '').toLowerCase();
                 
-                // 国名ラベル
                 const countryLabels = {
-                    'Korea': '韓国',
-                    'Thailand': 'タイ',
-                    'Taiwan': '台湾',
-                    'China': '中国',
-                    'Japan': '日本',
-                    'Philippines': 'フィリピン'
+                    'Korea': '韓国', 'South Korea': '韓国', 'Thailand': 'タイ', 'Taiwan': '台湾', 'China': '中国', 'Japan': '日本', 'Philippines': 'フィリピン'
                 };
                 const countryLabel = countryLabels[w.Country] || '海外';
                 
-                // プラットフォームマッピング
-                let platform = 'other';
-                if (w.Platform) {
-                    const first = w.Platform.split('/')[0].trim();
-                    const platformMap = {
-                        'Netflix': 'netflix',
-                        'iQIYI': 'iqiyi',
-                        'Viki': 'viki',
-                        'GagaOOLala': 'gaga',
-                        'U-NEXT': 'unext',
-                        'Viu': 'viu',
-                        'GMMTV': 'gmmtv'
-                    };
-                    platform = platformMap[first] || 'other';
+                let fullDate = '未定';
+                if (w.Year && w.Month && w.Day) {
+                    const time = w.Time || '00:00';
+                    fullDate = `${w.Year}-${String(w.Month).padStart(2, '0')}-${String(w.Day).padStart(2, '0')}T${time}`;
                 }
-                
-                // 年の表示（年だけある場合は「2023年」、無い場合は「未定」）
-                const nextAir = w.Year ? `${w.Year}年` : '未定';
-                
-                // 俳優名（空でないもののみ）
+
                 const actors = [w.Cast1, w.Cast2].filter(a => a && a.trim && a.trim() !== '');
                 
                 return {
                     id: i + 1,
-                    title: w.Title_JP || w.Title_EN || w.Title_Native || '無題',
+                    title: w.Title_JP || w.Title_EN || '無題',
                     country: country,
-                    platform: platform,
-                    nextAir: nextAir,
+                    platform: w.Platform || 'other',
+                    nextAir: w.Year ? `${w.Year}年` : '未定',
+                    fullDate: fullDate, 
+                    year: w.Year, 
                     thumbnail: countryLabel + 'BLドラマ',
-                    detailUrl: '/works/' + (w.Title_EN || '').toLowerCase().replace(/\s+/g, '-'),
+                    detailUrl: `work-detail.html?id=${i + 1}`,
                     actors: actors,
                     viewCount: Math.floor(Math.random() * 5000) + 500
                 };
+            });
+
+            works.sort((a, b) => {
+                if (a.fullDate === '未定' && b.fullDate === '未定') return 0;
+                if (a.fullDate === '未定') return 1;
+                if (b.fullDate === '未定') return -1;
+                return new Date(b.fullDate) - new Date(a.fullDate);
             });
             
             console.log(`${works.length}件の作品を読み込みました`);
@@ -871,15 +974,18 @@
             netflix: "Netflix",
             unext: "U-NEXT",
             viki: "Viki",
-            gaga: "GagaOOLala"
+            gaga: "GagaOOLala",
+            other: "その他"
         };
 
         let selectedWorks = new Set();
         let currentCountry = 'all';
         let currentSearchQuery = '';
-        let currentYear = '2026';
-        let currentMonth = '2';
+        let currentYear = 'all';
+        let currentMonth = 'all';
         let currentPlatform = 'all';
+        let currentPage = 1;
+        const itemsPerPage = 20;
 
         function loadSelectedWorks() {
             try {
@@ -900,17 +1006,14 @@
             }
         }
 
-        // ランキングを描画
         function renderRanking() {
             const rankingScroll = document.getElementById('rankingScroll');
-            
-            // アクセス数でソート（TOP10）
             const topWorks = [...works]
                 .sort((a, b) => b.viewCount - a.viewCount)
                 .slice(0, 10);
             
             rankingScroll.innerHTML = topWorks.map((work, index) => `
-                <div class="ranking-card" onclick="alert('詳細ページへ: ${work.title}')">
+                <div class="ranking-card" onclick="window.location.href='${work.detailUrl}'">
                     <div class="ranking-badge">${index + 1}</div>
                     <div class="ranking-thumbnail">${work.thumbnail}</div>
                     <div class="ranking-info">
@@ -921,37 +1024,30 @@
             `).join('');
         }
 
-        // フィルタリング処理（作品名 + 俳優名で検索）
         function getFilteredWorks() {
             return works.filter(work => {
-                if (currentCountry !== 'all' && work.country !== currentCountry) {
-                    return false;
-                }
+                if (currentCountry !== 'all' && work.country !== currentCountry) return false;
                 
-                // 作品名と俳優名の両方で検索
                 if (currentSearchQuery) {
                     const query = currentSearchQuery.toLowerCase();
                     const titleMatch = work.title.toLowerCase().includes(query);
-                    const actorMatch = work.actors.some(actor => 
-                        actor.toLowerCase().includes(query)
-                    );
-                    if (!titleMatch && !actorMatch) {
+                    const actorMatch = work.actors.some(actor => actor.toLowerCase().includes(query));
+                    if (!titleMatch && !actorMatch) return false;
+                }
+                
+                if (currentYear !== 'all' && work.year != parseInt(currentYear)) {
+                    return false;
+                }
+                
+                if (currentMonth !== 'all') {
+                    if (work.fullDate === '未定') return false;
+                    const workDate = new Date(work.fullDate);
+                    if (isNaN(workDate.getTime()) || (workDate.getMonth() + 1) != parseInt(currentMonth)) {
                         return false;
                     }
                 }
                 
-                const workDate = new Date(work.nextAir);
-                if (currentYear !== 'all' && workDate.getFullYear() !== parseInt(currentYear)) {
-                    return false;
-                }
-                
-                if (currentMonth !== 'all' && (workDate.getMonth() + 1) !== parseInt(currentMonth)) {
-                    return false;
-                }
-                
-                if (currentPlatform !== 'all' && work.platform !== currentPlatform) {
-                    return false;
-                }
+                if (currentPlatform !== 'all' && work.platform !== currentPlatform) return false;
                 
                 return true;
             });
@@ -962,25 +1058,19 @@
             const resultsInfo = document.getElementById('resultsInfo');
             
             const filteredWorks = getFilteredWorks();
-            const maxDisplay = 20; // 最大5段表示（4列×5段=20件）
-            const displayWorks = filteredWorks.slice(0, maxDisplay);
-            const hasMore = filteredWorks.length > maxDisplay;
-            
-            if (currentSearchQuery || currentYear !== 'all' || currentMonth !== 'all' || currentPlatform !== 'all' || currentCountry !== 'all') {
-                resultsInfo.textContent = `${filteredWorks.length}件の作品が見つかりました${hasMore ? `（${maxDisplay}件表示中）` : ''}`;
-            } else {
-                resultsInfo.textContent = hasMore ? `全${filteredWorks.length}件中 ${maxDisplay}件を表示` : '';
-            }
+            const totalItems = filteredWorks.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const displayWorks = filteredWorks.slice(startIndex, endIndex);
+
+            resultsInfo.textContent = `${totalItems}件の作品が見つかりました`;
             
             grid.innerHTML = '';
             
             if (filteredWorks.length === 0) {
-                grid.innerHTML = `
-                    <div class="no-results">
-                        <h3>作品が見つかりませんでした</h3>
-                        <p>検索条件を変更してください</p>
-                    </div>
-                `;
+                grid.innerHTML = `<div class="no-results"><h3>作品が見つかりませんでした</h3><p>検索条件を変更してください</p></div>`;
+                createPagination(0, 0);
                 return;
             }
             
@@ -990,17 +1080,14 @@
                 if (selectedWorks.has(work.id)) card.classList.add('selected');
                 
                 card.addEventListener('click', (e) => {
-                    if (e.target.type === 'checkbox' || e.target.closest('.checkbox-overlay')) {
-                        return;
-                    }
-                    alert(`詳細ページへ: ${work.title}\n出演: ${work.actors.join(', ')}\nURL: ${work.detailUrl}`);
+                    if (e.target.type === 'checkbox' || e.target.closest('.checkbox-overlay')) return;
+                    window.location.href = work.detailUrl;
                 });
                 
                 card.innerHTML = `
                     <div class="work-thumbnail">
                         <div class="checkbox-overlay">
-                            <input type="checkbox" ${selectedWorks.has(work.id) ? 'checked' : ''} 
-                                   data-work-id="${work.id}">
+                            <input type="checkbox" ${selectedWorks.has(work.id) ? 'checked' : ''} data-work-id="${work.id}">
                         </div>
                         ${work.thumbnail}
                     </div>
@@ -1008,9 +1095,9 @@
                         <div class="work-title">${work.title}</div>
                         <div class="work-meta">
                             <div>
-                                <span class="platform-tag">${platformNames[work.platform]}</span>
+                                <span class="platform-tag">${platformNames[work.platform] || 'その他'}</span>
                             </div>
-                            <div class="next-air">次回: ${formatDate(work.nextAir)}</div>
+                            <div class="next-air">配信年: ${work.nextAir}</div>
                         </div>
                     </div>
                 `;
@@ -1025,10 +1112,88 @@
                     toggleWork(workId);
                 });
             });
+            createPagination(totalItems, totalPages);
         }
 
+        function createPagination(totalItems, totalPages) {
+            const pagination = document.getElementById('pagination');
+            const paginationInfo = document.getElementById('paginationInfo');
+
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                paginationInfo.innerHTML = '';
+                return;
+            }
+            
+            let html = '';
+            
+            // 最初へボタン
+            html += `<button class="page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="goToPage(1)">最初へ</button>`;
+            
+            // 前へボタン
+            html += `<button class="page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="goToPage(${currentPage - 1})">← 前</button>`;
+            
+            // ページ番号
+            html += '<div class="page-numbers">';
+            
+            const maxVisiblePages = 5;
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPages, currentPage + 2);
+            
+            if (startPage > 1) {
+                html += `<button class="page-num" onclick="goToPage(1)">1</button>`;
+                if (startPage > 2) {
+                    html += '<span class="dots">...</span>';
+                }
+            }
+            
+            for (let i = startPage; i <= endPage; i++) {
+                html += `<button class="page-num ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+            }
+            
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    html += '<span class="dots">...</span>';
+                }
+                html += `<button class="page-num" onclick="goToPage(${totalPages})">${totalPages}</button>`;
+            }
+            
+            html += '</div>';
+            
+            // 次へボタン
+            html += `<button class="page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="goToPage(${currentPage + 1})">次 →</button>`;
+            
+            // 最後へボタン
+            html += `<button class="page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="goToPage(${totalPages})">最後へ</button>`;
+            
+            pagination.innerHTML = html;
+            
+            const startItem = (currentPage - 1) * itemsPerPage + 1;
+            const endItem = Math.min(currentPage * itemsPerPage, totalItems);
+            paginationInfo.innerHTML = `全<strong>${totalItems}</strong>件中 <strong>${startItem}〜${endItem}</strong>件を表示（ページ <strong>${currentPage}</strong> / <strong>${totalPages}</strong>）`;
+        }
+
+        function goToPage(page) {
+            const filteredWorks = getFilteredWorks();
+            const totalItems = filteredWorks.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+            if (page < 1 || page > totalPages) return;
+            currentPage = page;
+            renderWorks();
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+
         function formatDate(dateStr) {
+            if (dateStr === '未定' || !dateStr) {
+                return '日時未定';
+            }
             const date = new Date(dateStr);
+            if (isNaN(date.getTime())) {
+                return '日時未定';
+            }
             const month = date.getMonth() + 1;
             const day = date.getDate();
             const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
@@ -1053,24 +1218,47 @@
         function renderCalendar() {
             const list = document.getElementById('calendarList');
             const count = document.getElementById('selectedCount');
-            
+        
             count.textContent = `${selectedWorks.size}件`;
-            
+        
             if (selectedWorks.size === 0) {
                 list.innerHTML = '<div class="empty-calendar">作品を選択すると、配信スケジュールがここに表示されます</div>';
                 return;
             }
-            
-            const selectedWorksData = works.filter(w => selectedWorks.has(w.id))
-                .sort((a, b) => new Date(a.nextAir) - new Date(b.nextAir));
-            
-            list.innerHTML = selectedWorksData.map(work => `
+        
+            const selectedItems = works
+                .filter(w => selectedWorks.has(w.id))
+                .map(w => {
+                    const originalWork = allWorks[w.id - 1];
+                    return {
+                        ...w,
+                        title: (originalWork && (originalWork.Title_JP || originalWork.Title_EN)) || w.title,
+                    };
+                })
+                .sort((a, b) => {
+                    const aDated = a.fullDate !== '未定';
+                    const bDated = b.fullDate !== '未定';
+                    if (aDated && !bDated) return -1;
+                    if (!aDated && bDated) return 1;
+                    if (aDated && bDated) return new Date(a.fullDate) - new Date(b.fullDate);
+                    if (a.year && !b.year) return -1;
+                    if (!a.year && b.year) return 1;
+                    if (a.year && b.year) return a.year - b.year;
+                    return (a.title || '').localeCompare(b.title || '');
+                });
+
+            list.innerHTML = selectedItems.map(work => {
+                const dateText = work.fullDate !== '未定'
+                    ? formatDate(work.fullDate)
+                    : (work.year ? `${work.year}年` : '配信日未定');
+                
+                return `
                 <div class="calendar-item">
-                    <div class="calendar-date">${formatDate(work.nextAir)}</div>
-                    <div class="calendar-work-title">${work.title}</div>
-                    <div class="calendar-platform">${platformNames[work.platform]}</div>
-                </div>
-            `).join('');
+                    <div class="calendar-date">${dateText}</div>
+                    <div class="calendar-work-title">${work.title || 'タイトル未定'}</div>
+                    <div class="calendar-platform">${platformNames[work.platform] || 'その他'}</div>
+                </div>`;
+            }).join('');
         }
 
         document.querySelectorAll('.country-tab').forEach(tab => {
@@ -1078,27 +1266,32 @@
                 document.querySelectorAll('.country-tab').forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
                 currentCountry = tab.dataset.country;
+                currentPage = 1;
                 renderWorks();
             });
         });
 
         document.getElementById('searchInput').addEventListener('input', (e) => {
             currentSearchQuery = e.target.value;
+            currentPage = 1;
             renderWorks();
         });
 
         document.getElementById('yearFilter').addEventListener('change', (e) => {
             currentYear = e.target.value;
+            currentPage = 1;
             renderWorks();
         });
 
         document.getElementById('monthFilter').addEventListener('change', (e) => {
             currentMonth = e.target.value;
+            currentPage = 1;
             renderWorks();
         });
 
         document.getElementById('platformFilter').addEventListener('change', (e) => {
             currentPlatform = e.target.value;
+            currentPage = 1;
             renderWorks();
         });
 

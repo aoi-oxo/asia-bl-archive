@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ボス・チャイクモン - 俳優詳細 | Asia BL Archive</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif;
+            background: #f5f5f5;
+            color: #2c2c2c;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: white;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: #2c2c2c;
+            font-family: 'Georgia', 'Yu Mincho', 'Hiragino Mincho ProN', serif;
+            letter-spacing: 1px;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin: 2rem;
+            transition: all 0.3s;
+        }
+        
+        .back-button:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+        
+        .actor-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        /* プロフィールヘッダー */
+        .profile-header {
+            background: white;
+            padding: 3rem 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .profile-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .profile-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .profile-photo-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .profile-photo-placeholder svg {
+            width: 80px;
+            height: 80px;
+            fill: white;
+        }
+        
+        .actor-name-ja {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #2c2c2c;
+        }
+        
+        .actor-name-en {
+            font-size: 1.1rem;
+            color: #999;
+            margin-bottom: 1.5rem;
+        }
+        
+        .actor-info {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        .actor-info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        /* SNSリンク */
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        .social-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #666;
+            transition: all 0.3s;
+            font-size: 1.2rem;
+        }
+        
+        .social-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #2c2c2c;
+        }
+        
+        /* 出演作品 */
+        .works-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .work-card {
+            background: white;
+            border: 1px solid #e8e0e8;
+            border-radius: 8px;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .work-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .work-thumbnail {
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .work-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .work-thumbnail-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            opacity: 0.4;
+        }
+        
+        .work-thumbnail-placeholder svg {
+            width: 40px;
+            height: 40px;
+            fill: white;
+        }
+        
+        .work-info {
+            padding: 1rem;
+        }
+        
+        .work-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .work-year {
+            font-size: 0.8rem;
+            color: #999;
+            margin-bottom: 0.3rem;
+        }
+        
+        .work-role {
+            font-size: 0.8rem;
+            color: #667eea;
+            font-weight: 500;
+        }
+        
+        /* よく共演する俳優 */
+        .costar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+        
+        .costar-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s;
+        }
+        
+        .costar-card:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+        }
+        
+        .costar-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.8rem;
+            overflow: hidden;
+        }
+        
+        .costar-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .costar-photo-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .costar-photo-placeholder svg {
+            width: 40px;
+            height: 40px;
+            fill: white;
+        }
+        
+        .costar-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.2rem;
+        }
+        
+        .costar-count {
+            font-size: 0.75rem;
+            color: #999;
+        }
+        
+        /* プロフィール文 */
+        .bio-text {
+            line-height: 1.8;
+            color: #444;
+        }
+        
+        /* イベント履歴 */
+        .event-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .event-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+        }
+        
+        .event-date {
+            flex-shrink: 0;
+            width: 100px;
+            font-weight: 600;
+            color: #667eea;
+            font-size: 0.9rem;
+        }
+        
+        .event-info {
+            flex: 1;
+        }
+        
+        .event-title {
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+        
+        .event-location {
+            font-size: 0.85rem;
+            color: #999;
+        }
+        
+        /* 受賞歴 */
+        .award-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        
+        .award-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            padding: 0.8rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .award-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .award-info {
+            flex: 1;
+        }
+        
+        .award-year {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 0.9rem;
+            margin-bottom: 0.2rem;
+        }
+        
+        .award-title {
+            font-weight: 500;
+        }
+        
+        /* AdSense広告エリア */
+        .ad-space {
+            background: #f8f9fa;
+            border: 2px dashed #e0e0e0;
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+            color: #999;
+            font-size: 0.85rem;
+        }
+        
+        .ad-space.horizontal {
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .ad-space.sidebar {
+            min-height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        @media (max-width: 768px) {
+            .actor-container {
+                padding: 1rem;
+            }
+            
+            .profile-header {
+                padding: 2rem 1.5rem;
+            }
+            
+            .profile-photo {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .actor-name-ja {
+                font-size: 1.5rem;
+            }
+            
+            .actor-info {
+                gap: 1rem;
+                flex-direction: column;
+            }
+            
+            .works-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .costar-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Asia BL Archive</div>
+    </header>
+
+    <a href="#" class="back-button" onclick="alert('TOPページへ戻る'); return false;">
+        ← TOPに戻る
+    </a>
+
+    <div class="actor-container">
+        <!-- プロフィールヘッダー -->
+        <div class="profile-header">
+            <div class="profile-photo">
+                <!-- 画像がある場合: <img src="path/to/photo.jpg" alt="ボス・チャイクモン"> -->
+                <!-- 画像がない場合（デフォルト）: -->
+                <div class="profile-photo-placeholder">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <h1 class="actor-name-ja">ボス・チャイクモン</h1>
+            <div class="actor-name-en">Boss Chaikamon</div>
+            
+            <div class="actor-info">
+                <div class="actor-info-item">
+                    🇹🇭 タイ
+                </div>
+                <div class="actor-info-item">
+                    1999年3月22日（27歳）
+                </div>
+                <div class="actor-info-item">
+                    183cm
+                </div>
+            </div>
+            
+            <div class="social-links">
+                <a href="#" class="social-btn" onclick="alert('Twitterへ'); return false;" title="Twitter">
+                    𝕏
+                </a>
+                <a href="#" class="social-btn" onclick="alert('Instagramへ'); return false;" title="Instagram">
+                    📷
+                </a>
+                <a href="#" class="social-btn" onclick="alert('TikTokへ'); return false;" title="TikTok">
+                    🎵
+                </a>
+            </div>
+        </div>
+
+        <!-- プロフィール -->
+        <div class="section">
+            <h2 class="section-title">📝 プロフィール</h2>
+            <p class="bio-text">
+                GMMTV所属の人気俳優。2018年のデビュー以来、数々のBLドラマに出演し、その演技力と魅力で多くのファンを魅了している。特に「Bad Buddy」でのパット役、「Love in the Air」でのペイ役が高い評価を得ている。
+            </p>
+        </div>
+
+        <!-- 出演作品 -->
+        <div class="section">
+            <h2 class="section-title">📺 出演作品（11作品）</h2>
+            <div class="works-grid">
+                <a href="#" class="work-card" onclick="alert('Love in the Airの詳細ページへ'); return false;">
+                    <div class="work-thumbnail">
+                        <div class="work-thumbnail-placeholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                            </svg>
+                            <div>タイBLドラマ</div>
+                        </div>
+                    </div>
+                    <div class="work-info">
+                        <div class="work-title">Love in the Air</div>
+                        <div class="work-year">2022年</div>
+                        <div class="work-role">ペイ役（主演）</div>
+                    </div>
+                </a>
+
+                <a href="#" class="work-card" onclick="alert('Bad Buddyの詳細ページへ'); return false;">
+                    <div class="work-thumbnail">
+                        <div class="work-thumbnail-placeholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                            </svg>
+                            <div>タイBLドラマ</div>
+                        </div>
+                    </div>
+                    <div class="work-info">
+                        <div class="work-title">Bad Buddy</div>
+                        <div class="work-year">2021年</div>
+                        <div class="work-role">パット役（主演）</div>
+                    </div>
+                </a>
+
+                <a href="#" class="work-card" onclick="alert('A Tale of Thousand Starsの詳細ページへ'); return false;">
+                    <div class="work-thumbnail">
+                        <div class="work-thumbnail-placeholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                            </svg>
+                            <div>タイBLドラマ</div>
+                        </div>
+                    </div>
+                    <div class="work-info">
+                        <div class="work-title">A Tale of Thousand Stars</div>
+                        <div class="work-year">2021年</div>
+                        <div class="work-role">プパ役（主演）</div>
+                    </div>
+                </a>
+
+                <a href="#" class="work-card" onclick="alert('Enchanteの詳細ページへ'); return false;">
+                    <div class="work-thumbnail">
+                        <div class="work-thumbnail-placeholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                            </svg>
+                            <div>タイBLドラマ</div>
+                        </div>
+                    </div>
+                    <div class="work-info">
+                        <div class="work-title">Enchante</div>
+                        <div class="work-year">2022年</div>
+                        <div class="work-role">テオ役（主演）</div>
+                    </div>
+                </a>
+
+                <a href="#" class="work-card" onclick="alert('Fish Upon the Skyの詳細ページへ'); return false;">
+                    <div class="work-thumbnail">
+                        <div class="work-thumbnail-placeholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                            </svg>
+                            <div>タイBLドラマ</div>
+                        </div>
+                    </div>
+                    <div class="work-info">
+                        <div class="work-title">Fish Upon the Sky</div>
+                        <div class="work-year">2021年</div>
+                        <div class="work-role">パイ役（助演）</div>
+                    </div>
+                </a>
+
+                <a href="#" class="work-card" onclick="alert('Theory of Loveの詳細ページへ'); return false;">
+                    <div class="work-thumbnail">
+                        <div class="work-thumbnail-placeholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                            </svg>
+                            <div>タイBLドラマ</div>
+                        </div>
+                    </div>
+                    <div class="work-info">
+                        <div class="work-title">Theory of Love</div>
+                        <div class="work-year">2019年</div>
+                        <div class="work-role">カイ役（主演）</div>
+                    </div>
+                </a>
+
+                <a href="#" class="work-card" onclick="alert('Dark Blue Kissの詳細ページへ'); return false;">
+                    <div class="work-thumbnail">
+                        <div class="work-thumbnail-placeholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                            </svg>
+                            <div>タイBLドラマ</div>
+                        </div>
+                    </div>
+                    <div class="work-info">
+                        <div class="work-title">Dark Blue Kiss</div>
+                        <div class="work-year">2019年</div>
+                        <div class="work-role">ピート役（主演）</div>
+                    </div>
+                </a>
+
+                <a href="#" class="work-card" onclick="alert('Kiss Me Againの詳細ページへ'); return false;">
+                    <div class="work-thumbnail">
+                        <div class="work-thumbnail-placeholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                            </svg>
+                            <div>タイBLドラマ</div>
+                        </div>
+                    </div>
+                    <div class="work-info">
+                        <div class="work-title">Kiss Me Again</div>
+                        <div class="work-year">2018年</div>
+                        <div class="work-role">ピート役（助演）</div>
+                    </div>
+                </a>
+
+                <a href="#" class="work-card" onclick="alert('Our Skyy 2の詳細ページへ'); return false;">
+                    <div class="work-thumbnail">
+                        <div class="work-thumbnail-placeholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                            </svg>
+                            <div>タイBLドラマ</div>
+                        </div>
+                    </div>
+                    <div class="work-info">
+                        <div class="work-title">Our Skyy 2</div>
+                        <div class="work-year">2023年</div>
+                        <div class="work-role">パット役（主演）</div>
+                    </div>
+                </a>
+
+                <a href="#" class="work-card" onclick="alert('Vice Versaの詳細ページへ'); return false;">
+                    <div class="work-thumbnail">
+                        <div class="work-thumbnail-placeholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                            </svg>
+                            <div>タイBLドラマ</div>
+                        </div>
+                    </div>
+                    <div class="work-info">
+                        <div class="work-title">Vice Versa</div>
+                        <div class="work-year">2022年</div>
+                        <div class="work-role">ゲスト出演</div>
+                    </div>
+                </a>
+
+                <a href="#" class="work-card" onclick="alert('Moonlight Chickenの詳細ページへ'); return false;">
+                    <div class="work-thumbnail">
+                        <div class="work-thumbnail-placeholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                            </svg>
+                            <div>タイBLドラマ</div>
+                        </div>
+                    </div>
+                    <div class="work-info">
+                        <div class="work-title">Moonlight Chicken</div>
+                        <div class="work-year">2023年</div>
+                        <div class="work-role">ゲスト出演</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- AdSense広告エリア2 -->
+        <div class="ad-space horizontal">
+            AdSense 横長広告（728×90 / 320×100）
+        </div>
+
+        <!-- 受賞歴 -->
+        <div class="section">
+            <h2 class="section-title">🏆 受賞歴</h2>
+            <div class="award-list">
+                <div class="award-item">
+                    <div class="award-icon">🏆</div>
+                    <div class="award-info">
+                        <div class="award-year">2022年</div>
+                        <div class="award-title">タイBLアワード 主演男優賞（Bad Buddy）</div>
+                    </div>
+                </div>
+                <div class="award-item">
+                    <div class="award-icon">🏆</div>
+                    <div class="award-info">
+                        <div class="award-year">2023年</div>
+                        <div class="award-title">Asia BL Drama Awards 最優秀カップル賞（Love in the Air）</div>
+                    </div>
+                </div>
+                <div class="award-item">
+                    <div class="award-icon">⭐</div>
+                    <div class="award-info">
+                        <div class="award-year">2021年</div>
+                        <div class="award-title">GMMTV Best Actor Nominee</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- イベント・来日情報 -->
+        <div class="section">
+            <h2 class="section-title">📅 イベント・来日情報</h2>
+            <div class="event-list">
+                <div class="event-item">
+                    <div class="event-date">2024/06/15</div>
+                    <div class="event-info">
+                        <div class="event-title">ファンミーティング 2024</div>
+                        <div class="event-location">📍 東京・品川グランドホール</div>
+                    </div>
+                </div>
+                <div class="event-item">
+                    <div class="event-date">2024/03/22</div>
+                    <div class="event-info">
+                        <div class="event-title">バースデーイベント</div>
+                        <div class="event-location">📍 バンコク</div>
+                    </div>
+                </div>
+                <div class="event-item">
+                    <div class="event-date">2023/12/10</div>
+                    <div class="event-info">
+                        <div class="event-title">舞台挨拶・上映会</div>
+                        <div class="event-location">📍 大阪・梅田ブルク7</div>
+                    </div>
+                </div>
+                <div class="event-item">
+                    <div class="event-date">2023/08/20</div>
+                    <div class="event-info">
+                        <div class="event-title">GMMTV Fanfest 2023</div>
+                        <div class="event-location">📍 タイ・インパクトアリーナ</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- よく共演する俳優 -->
+        <div class="section">
+            <h2 class="section-title">👥 よく共演する俳優</h2>
+            <div class="costar-grid">
+                <a href="#" class="costar-card" onclick="alert('ノエル・ニティのページへ'); return false;">
+                    <div class="costar-photo">
+                        <div class="costar-photo-placeholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="costar-name">ノエル・ニティ</div>
+                    <div class="costar-count">3作品</div>
+                </a>
+
+                <a href="#" class="costar-card" onclick="alert('フォート・ティティポンのページへ'); return false;">
+                    <div class="costar-photo">
+                        <div class="costar-photo-placeholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="costar-name">フォート・ティティポン</div>
+                    <div class="costar-count">2作品</div>
+                </a>
+
+                <a href="#" class="costar-card" onclick="alert('ピート・ナッタポンのページへ'); return false;">
+                    <div class="costar-photo">
+                        <div class="costar-photo-placeholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="costar-name">ピート・ナッタポン</div>
+                    <div class="costar-count">2作品</div>
+                </a>
+
+                <a href="#" class="costar-card" onclick="alert('ナノン・コラパットのページへ'); return false;">
+                    <div class="costar-photo">
+                        <div class="costar-photo-placeholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="costar-name">ナノン・コラパット</div>
+                    <div class="costar-count">2作品</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- AdSense広告エリア3 -->
+        <div class="ad-space horizontal">
+            AdSense 横長広告（728×90 / 320×100）
+        </div>
+    </div>
+</body>
+</html>

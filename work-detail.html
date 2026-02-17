@@ -560,8 +560,6 @@ try {
     throw new Error("API error");
   }
 
-  const data = await response.json();
-
   const work = await response.json();
 
 if (!work || !work.ID) {
@@ -570,6 +568,7 @@ if (!work || !work.ID) {
 }
 
 renderWorkDetails(work, [], []);
+
 
 
 } catch (error) {

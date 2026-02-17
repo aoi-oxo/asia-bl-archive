@@ -900,38 +900,10 @@
         </div>
     </div>
 
-    <script src="data/works_part1.js"></script>
-    <script src="data/works_part2.js"></script>
-    <script src="data/works_part3.js"></script>
-    <script src="data/works_part4.js"></script>
-    <script src="data/works_part5.js"></script>
-    <script src="data/works_part6.js"></script>
-    <script src="data/works_part7.js"></script>
-    <script src="data/works_part8.js"></script>
-    <script src="data/actors_part1.js"></script>
-    <script src="data/actors_part2.js"></script>
-    <script src="data/actors_part3.js"></script>
-    <script src="data/actors_part4.js"></script>
-    <script src="data/actors_part5.js"></script>
+    
     <script>
-        // データの安全な合体
-        const allWorks = [
-            ...(typeof worksPart1 !== 'undefined' ? worksPart1 : []),
-            ...(typeof worksPart2 !== 'undefined' ? worksPart2 : []),
-            ...(typeof worksPart3 !== 'undefined' ? worksPart3 : []),
-            ...(typeof worksPart4 !== 'undefined' ? worksPart4 : []),
-            ...(typeof worksPart5 !== 'undefined' ? worksPart5 : []),
-            ...(typeof worksPart6 !== 'undefined' ? worksPart6 : []),
-            ...(typeof worksPart7 !== 'undefined' ? worksPart7 : []),
-            ...(typeof worksPart8 !== 'undefined' ? worksPart8 : [])
-        ];
-        const allActors = [
-            ...(typeof actors_part1 !== 'undefined' ? actors_part1 : []),
-            ...(typeof actors_part2 !== 'undefined' ? actors_part2 : []),
-            ...(typeof actors_part3 !== 'undefined' ? actors_part3 : []),
-            ...(typeof actors_part4 !== 'undefined' ? actors_part4 : []),
-            ...(typeof actors_part5 !== 'undefined' ? actors_part5 : [])
-        ];
+        
+        
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         // 管理者設定
@@ -956,7 +928,45 @@
         }
         
         // ページ読み込み時にデータを変換
-        works = allWorks.map((w, i) => {
+        let works = [];
+
+window.addEventListener("load", async () => {
+  try {
+    const response = await fetch("https://script.google.com/macros/s/AKfycbyPRP7mexaSIblweHtcpIeHJUf0TWfAibaZTdSJ4Sl7ZFLJVsM-IiygTU9-yQ2gd5g6WA/exec");
+    const data = await response.json();
+
+    works = data.map((w, i) => {
+      const title =
+        (w.Title_JP && w.Title_JP !== 'N/A') ? w.Title_JP :
+        (w.Title_EN && w.Title_EN !== 'N/A') ? w.Title_EN :
+        (w.Title_Native && w.Title_Native !== 'N/A') ? w.Title_Native :
+        '無題';
+
+      return {
+        id: w.ID,  // ← ここ重要
+        title: title,
+        country: (w.Country || '').toLowerCase(),
+        platform: (w.Platform || '').toLowerCase(),
+        year: w.Year,
+        fullDate: w.Start_Date || '未定',
+        thumbnail: (w.Country || '') + 'BLドラマ',
+        detailUrl: `work-detail.html?id=${w.ID}`,
+        actors: [w.Cast1, w.Cast2].filter(Boolean),
+        viewCount: Math.floor(Math.random() * 5000) + 500
+      };
+    });
+
+    works.sort((a, b) => new Date(b.fullDate) - new Date(a.fullDate));
+
+    renderRanking();
+    renderWorks();
+    renderCalendar();
+
+  } catch (error) {
+    console.error("取得エラー:", error);
+  }
+});
+
             const countryMap = {
                 'Korea': 'korea', 'South Korea': 'korea', 'Thailand': 'thailand', 'Taiwan': 'taiwan', 'China': 'china', 'Japan': 'japan', 'Philippines': 'philippines'
             };

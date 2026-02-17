@@ -560,18 +560,14 @@ try {
     throw new Error("API error");
   }
 
-  const data = await response.json();
-
-const work = data.find(item =>
-  String(item.ID).trim() === String(workId).trim()
-);
-
+  const work = await response.json();
 console.log(work);
 
-if (!work) {
+if (!work || !work.ID) {
   displayNotFound();
   return;
 }
+
 
 
 renderWorkDetails(work, [], []);

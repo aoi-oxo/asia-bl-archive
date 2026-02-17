@@ -562,15 +562,15 @@ try {
 
   const data = await response.json();
 
-  const work = data;
+  const work = await response.json();
 
-
-if (!work) {
+if (!work || !work.ID) {
   displayNotFound();
   return;
 }
 
 renderWorkDetails(work, [], []);
+
 
 } catch (error) {
   console.error("取得エラー:", error);

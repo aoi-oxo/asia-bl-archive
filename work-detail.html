@@ -560,14 +560,17 @@ try {
     throw new Error("API error");
   }
 
-  const work = await response.json();
+  const data = await response.json();
 
-  if (work.error) {
-    displayNotFound();
-    return;
-  }
+const work = data.find(item => item.ID === workId);
 
-  renderWorkDetails(work, [], []);
+if (!work) {
+  displayNotFound();
+  return;
+}
+
+renderWorkDetails(work, [], []);
+
 } catch (error) {
   console.error("取得エラー:", error);
   displayNotFound();

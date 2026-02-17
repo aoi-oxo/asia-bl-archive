@@ -587,7 +587,11 @@ renderWorkDetails(work, [], []);
         }
 
         const renderWorkDetails = (work, allActors, allWorks) => {
-            const displayTitle = work.Title_JP || work.Title_EN || work.Title_Native;
+            const displayTitle =
+  (work.Title_JP && work.Title_JP !== 'N/A' ? work.Title_JP : null) ||
+  (work.Title_EN && work.Title_EN !== 'N/A' ? work.Title_EN : null) ||
+  (work.Title_Native && work.Title_Native !== 'N/A' ? work.Title_Native : null);
+
             document.title = `${displayTitle || '作品詳細'} | Asia BL Archive`;
 
             if (work.Image_URL && work.Image_URL !== 'N/A') {

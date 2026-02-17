@@ -976,34 +976,8 @@ window.addEventListener("load", async () => {
                 'Korea': '韓国', 'South Korea': '韓国', 'Thailand': 'タイ', 'Taiwan': '台湾', 'China': '中国', 'Japan': '日本', 'Philippines': 'フィリピン'
             };
             const countryLabel = countryLabels[w.Country] || '海外';
-            
-            const title = getWorkTitle(w);
-            const year = w.Year;
-            const month = w.Month || w.month;
-            const day = w.Day || w.day;
-            const time = w.Time || w.time || '00:00';
-            const platform = w.Platform || '不明';
+          
 
-            let fullDate = '未定';
-            if (year && month && day) {
-                fullDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}T${time}`;
-            }
-
-            const actors = [w.Cast1, w.Cast2].filter(a => a && a.trim && a.trim() !== '');
-            
-            return {
-                id: i + 1,
-                title: title,
-                country: country,
-                platform: platform.toLowerCase(),
-                nextAir: year ? `${year}年` : '不明',
-                fullDate: fullDate, 
-                year: year, 
-                thumbnail: countryLabel + 'BLドラマ',
-                detailUrl: `work-detail.html?id=${i + 1}`,
-                actors: actors,
-                viewCount: Math.floor(Math.random() * 5000) + 500
-            };
         });
 
         works.sort((a, b) => {

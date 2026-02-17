@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,14 +11,14 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif;
             background: #f5f5f5;
             color: #2c2c2c;
             line-height: 1.6;
         }
-        
+
         header {
             background: white;
             padding: 1.5rem 2rem;
@@ -26,7 +27,7 @@
             top: 0;
             z-index: 100;
         }
-        
+
         .logo {
             font-size: 1.5rem;
             font-weight: 400;
@@ -34,7 +35,7 @@
             font-family: 'Georgia', 'Yu Mincho', 'Hiragino Mincho ProN', serif;
             letter-spacing: 1px;
         }
-        
+
         .back-button {
             display: inline-flex;
             align-items: center;
@@ -49,18 +50,29 @@
             margin: 2rem;
             transition: all 0.3s;
         }
-        
+
         .back-button:hover {
             border-color: #667eea;
             color: #667eea;
         }
-        
+
         .detail-container {
             max-width: 900px;
             margin: 0 auto;
             padding: 2rem;
+            visibility: hidden;
+            /* Hide until content is ready */
         }
-        
+
+        #notFoundMessage {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            text-align: center;
+            display: none;
+            /* Hidden by default */
+        }
+
         .main-visual {
             width: 100%;
             height: 400px;
@@ -72,17 +84,17 @@
             color: white;
             font-size: 1.2rem;
             margin-bottom: 2rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             position: relative;
             overflow: hidden;
         }
-        
+
         .main-visual img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-        
+
         .main-visual-placeholder {
             display: flex;
             flex-direction: column;
@@ -90,28 +102,28 @@
             gap: 1rem;
             opacity: 0.3;
         }
-        
+
         .main-visual-placeholder svg {
             width: 80px;
             height: 80px;
             fill: white;
         }
-        
+
         .work-header {
             background: white;
             padding: 2rem;
             border-radius: 12px;
             margin-bottom: 2rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
-        
+
         .work-title {
             font-size: 2rem;
             font-weight: 600;
             margin-bottom: 1rem;
             color: #2c2c2c;
         }
-        
+
         .work-meta {
             display: flex;
             gap: 1.5rem;
@@ -119,50 +131,50 @@
             color: #666;
             font-size: 0.95rem;
         }
-        
+
         .work-meta-item {
             display: flex;
             align-items: center;
             gap: 0.3rem;
         }
-        
+
         .section {
             background: white;
             padding: 2rem;
             border-radius: 12px;
             margin-bottom: 2rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
-        
+
         .section-title {
             font-size: 1.1rem;
             font-weight: 600;
             margin-bottom: 1.5rem;
             color: #2c2c2c;
         }
-        
+
         /* 配信プラットフォーム */
         .platform-group {
             margin-bottom: 1.5rem;
         }
-        
+
         .platform-group:last-child {
             margin-bottom: 0;
         }
-        
+
         .platform-label {
             font-size: 0.85rem;
             color: #999;
             margin-bottom: 0.8rem;
             font-weight: 500;
         }
-        
+
         .platform-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
             gap: 0.8rem;
         }
-        
+
         .platform-btn {
             padding: 1rem;
             border-radius: 8px;
@@ -178,36 +190,36 @@
             align-items: center;
             gap: 0.3rem;
         }
-        
+
         .platform-btn.available {
             background: #667eea;
             color: white;
         }
-        
+
         .platform-btn.available:hover {
             background: #5568d3;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
-        
+
         .platform-btn.upcoming {
             background: #f0f0f0;
             color: #666;
         }
-        
+
         .platform-btn.upcoming:hover {
             background: #e8e8e8;
         }
-        
+
         .platform-name {
             font-weight: 600;
         }
-        
+
         .platform-status {
             font-size: 0.75rem;
             opacity: 0.9;
         }
-        
+
         /* カレンダーボタン */
         .calendar-btn {
             width: 100%;
@@ -225,25 +237,25 @@
             justify-content: center;
             gap: 0.5rem;
         }
-        
+
         .calendar-btn:hover {
             background: #667eea;
             color: white;
         }
-        
+
         /* あらすじ */
         .synopsis {
             line-height: 1.8;
             color: #444;
         }
-        
+
         /* キャスト */
         .cast-list {
             display: flex;
             flex-direction: column;
             gap: 1rem;
         }
-        
+
         .cast-item {
             display: flex;
             align-items: center;
@@ -255,12 +267,12 @@
             color: inherit;
             transition: all 0.3s;
         }
-        
+
         .cast-item:hover {
             background: #f0f0f0;
             transform: translateX(4px);
         }
-        
+
         .cast-photo {
             width: 60px;
             height: 60px;
@@ -275,13 +287,13 @@
             overflow: hidden;
             position: relative;
         }
-        
+
         .cast-photo img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-        
+
         .cast-photo-placeholder {
             width: 100%;
             height: 100%;
@@ -289,30 +301,30 @@
             align-items: center;
             justify-content: center;
         }
-        
+
         .cast-photo-placeholder svg {
             width: 35px;
             height: 35px;
             fill: white;
         }
-        
+
         .cast-name {
             font-weight: 600;
             font-size: 1rem;
         }
-        
+
         .cast-arrow {
             margin-left: auto;
             color: #999;
         }
-        
+
         /* 配信スケジュール */
         .schedule-list {
             display: flex;
             flex-direction: column;
             gap: 0.8rem;
         }
-        
+
         .schedule-item {
             display: grid;
             grid-template-columns: 60px 1fr 140px;
@@ -322,31 +334,31 @@
             border-radius: 8px;
             align-items: center;
         }
-        
+
         .episode-num {
             font-weight: 700;
             color: #667eea;
             font-size: 0.9rem;
         }
-        
+
         .episode-title {
             font-weight: 500;
             font-size: 0.9rem;
         }
-        
+
         .episode-date {
             text-align: right;
             color: #666;
             font-size: 0.85rem;
         }
-        
+
         /* 関連作品 */
         .related-works {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 1.5rem;
         }
-        
+
         .related-card {
             background: white;
             border: 1px solid #e8e0e8;
@@ -355,14 +367,14 @@
             text-decoration: none;
             color: inherit;
             transition: all 0.3s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
-        
+
         .related-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-        
+
         .related-thumbnail {
             width: 100%;
             height: 120px;
@@ -375,13 +387,13 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .related-thumbnail img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-        
+
         .related-thumbnail-placeholder {
             display: flex;
             flex-direction: column;
@@ -389,60 +401,61 @@
             gap: 0.3rem;
             opacity: 0.4;
         }
-        
+
         .related-thumbnail-placeholder svg {
             width: 40px;
             height: 40px;
             fill: white;
         }
-        
+
         .related-info {
             padding: 1rem;
         }
-        
+
         .related-title {
             font-weight: 600;
             font-size: 0.9rem;
             margin-bottom: 0.3rem;
         }
-        
+
         .related-meta {
             font-size: 0.8rem;
             color: #999;
         }
-        
+
         @media (max-width: 768px) {
             .detail-container {
                 padding: 1rem;
             }
-            
+
             .main-visual {
                 height: 250px;
             }
-            
+
             .work-title {
                 font-size: 1.5rem;
             }
-            
+
             .platform-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
-            
+
             .schedule-item {
                 grid-template-columns: 1fr;
                 gap: 0.5rem;
             }
-            
+
             .episode-date {
                 text-align: left;
             }
-            
+
             .related-works {
                 grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
+
 <body>
     <header>
         <div class="logo">Asia BL Archive</div>
@@ -452,12 +465,20 @@
         ← TOPに戻る
     </a>
 
+    <div id="notFoundMessage">
+        <div class="work-header">
+            <h1 class="work-title">作品が見つかりませんでした</h1>
+            <p style="margin-top: 1rem;">お探しの作品は見つかりませんでした。URLが正しいかご確認ください。</p>
+        </div>
+    </div>
+
     <div class="detail-container">
         <!-- メインビジュアル -->
         <div class="main-visual" id="mainVisual">
             <div class="main-visual-placeholder">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                    <path
+                        d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
                 </svg>
                 <div>メインビジュアル</div>
             </div>
@@ -474,7 +495,7 @@
         <div class="section">
             <h2 class="section-title">📺 どこで観れる？</h2>
             <div id="platformSection">
-                <p>配信プラットフォーム情報が見つかりませんでした。</p>
+                <!-- JS will populate this -->
             </div>
         </div>
 
@@ -513,60 +534,74 @@
             </div>
         </div>
     </div>
-    
-    <script src="data/works.js"></script>
-    <script src="data/actors.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const params = new URLSearchParams(window.location.search);
-            const workId = parseInt(params.get('id'));
 
-            if (!workId || typeof allWorks === 'undefined' || workId > allWorks.length || workId <= 0) {
-                const detailContainer = document.querySelector('.detail-container');
-                detailContainer.innerHTML = `
-                    <div class="work-header" style="text-align: center;">
-                        <h1 class="work-title">作品が見つかりませんでした</h1>
-                        <p style="margin-top: 1rem;">お探しの作品は見つかりませんでした。URLが正しいかご確認ください。</p>
-                    </div>
-                `;
-                return;
+
+    <script>
+        window.addEventListener("load", async () => {
+
+// ここに新しいfetchコードを書く
+const urlParams = new URLSearchParams(window.location.search);
+const workId = urlParams.get("id");
+
+if (!workId) {
+  displayNotFound();
+  return;
+}
+
+try {
+    const response = await fetch(
+  `https://script.google.com/macros/s/AKfycbyPRP7mexaSlbweHtpleHJu0fTWFiaBzTdsJ4SfZFLJVsM-IiygTU9-yQ2gd5g6WA/exec?id=${workId}`
+);
+
+
+
+
+  if (!response.ok) {
+    throw new Error("API error");
+  }
+
+  const work = await response.json();
+
+  if (work.error) {
+    displayNotFound();
+    return;
+  }
+
+  renderWorkDetails(work, [], []);
+} catch (error) {
+  console.error("取得エラー:", error);
+  displayNotFound();
+}
+
+        });
+
+        function displayNotFound() {
+            document.getElementById('notFoundMessage').style.display = 'block';
+            document.querySelector('.detail-container').style.display = 'none';
+        }
+
+        const renderWorkDetails = (work, allActors, allWorks) => {
+            const displayTitle = work.Title_JP || work.Title_EN || work.Title_Native;
+            document.title = `${displayTitle || '作品詳細'} | Asia BL Archive`;
+
+            if (work.Image_URL && work.Image_URL !== 'N/A') {
+                document.getElementById('mainVisual').innerHTML = `<img src="${work.Image_URL}" alt="${displayTitle || ''}">`;
             }
 
-            const work = allWorks[workId - 1];
+            document.getElementById('workTitle').textContent = displayTitle || 'タイトル不明';
 
-            const displayTitle = (work.Title_JP && work.Title_JP !== 'N/A') 
-                ? work.Title_JP 
-                : (work.Title_EN && work.Title_EN !== 'N/A' 
-                    ? work.Title_EN 
-                    : work.Title_Native);
-
-            // ページのタイトルを設定
-            document.title = `${displayTitle} - 作品詳細 | Asia BL Archive`;
-
-            // 作品名
-            document.getElementById('workTitle').textContent = displayTitle;
-
-            // メタ情報
-            const workMeta = document.getElementById('workMeta');
             const countryLabels = {
-                'Korea': '🇰🇷 韓国',
-                'South Korea': '🇰🇷 韓国',
-                'Thailand': '🇹🇭 タイ',
-                'Taiwan': '🇹🇼 台湾',
-                'China': '🇨🇳 中国',
-                'Japan': '🇯🇵 日本',
-                'Philippines': '🇵🇭 フィリピン'
+                'Korea': '🇰🇷 韓国', 'South Korea': '🇰🇷 韓国', 'Thailand': '🇹🇭 タイ',
+                'Taiwan': '🇹🇼 台湾', 'China': '🇨🇳 中国', 'Japan': '🇯🇵 日本', 'Philippines': '🇵🇭 フィリピン'
             };
-            workMeta.innerHTML = `
-                <div class="work-meta-item">${countryLabels[work.Country] || work.Country}</div>
+            document.getElementById('workMeta').innerHTML = `
+                <div class="work-meta-item">${countryLabels[work.Country] || work.Country || 'N/A'}</div>
                 <div class="work-meta-item">全${work.Total_Episodes || 'N/A'}話</div>
-                <div class="work-meta-item">${(work.Genre || '').split(';')[0]}</div>
+                <div class="work-meta-item">${(work.Genre || '').split(';')[0] || 'N/A'}</div>
             `;
-            
-            // あらすじ
+
             document.getElementById('synopsis').textContent = work.Synopsis_JP || work.Synopsis || 'あらすじ情報がありません。';
 
-            // 配信プラットフォーム
             const platformSection = document.getElementById('platformSection');
             if (work.Platform && work.Platform !== 'N/A') {
                 const platforms = work.Platform.split('/').map(p => p.trim());
@@ -578,35 +613,31 @@
                                 <span class="platform-status">配信中</span>
                             </a>
                         `).join('')}
-                    </div>
-                `;
+                    </div>`;
             } else {
                 platformSection.innerHTML = '<p>配信プラットフォーム情報が見つかりませんでした。</p>';
             }
 
-            // キャスト
             const castList = document.getElementById('castList');
-            const castNames = [];
+            const castNames = new Set();
             for (let i = 1; i <= 20; i++) {
-                const castNameEn = work[`Cast${i}_EN`];
-                const castNameNative = work[`Cast${i}_Native`];
-                if (castNameEn && castNameEn !== 'N/A') {
-                    castNames.push(castNameEn);
-                } else if (castNameNative && castNameNative !== 'N/A') {
-                    castNames.push(castNameNative);
+                const castName = work[`Cast${i}_EN`] || work[`Cast${i}_Native`];
+                if (castName && castName !== 'N/A') {
+                    castNames.add(castName);
                 }
             }
 
-            if (castNames.length > 0) {
-                const uniqueCastNames = [...new Set(castNames)]; // Remove duplicates
-                castList.innerHTML = uniqueCastNames.map(actorName => {
+            if (castNames.size > 0) {
+                castList.innerHTML = Array.from(castNames).map(actorName => {
+                    const actor = allActors.find(a => a.Name_EN === actorName || a.Name_Native === actorName || a.Name_JP === actorName);
+                    let actorPhotoHTML = `<div class="cast-photo-placeholder"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>`;
+                    if (actor && actor.Image_URL && actor.Image_URL !== 'N/A') {
+                        actorPhotoHTML = `<img src="${actor.Image_URL}" alt="${actorName}">`;
+                    }
+                    const nameForLink = actor ? (actor.Name_EN || actorName) : actorName;
                     return `
-                        <a href="actor-detail.html?name=${encodeURIComponent(actorName)}" class="cast-item">
-                            <div class="cast-photo">
-                                <div class="cast-photo-placeholder">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                                </div>
-                            </div>
+                        <a href="actor-detail.html?name=${encodeURIComponent(nameForLink)}" class="cast-item">
+                            <div class="cast-photo">${actorPhotoHTML}</div>
                             <div class="cast-name">${actorName}</div>
                             <div class="cast-arrow">→</div>
                         </a>
@@ -616,25 +647,22 @@
                 castList.innerHTML = '<p>キャスト情報がありません。</p>';
             }
 
-            // 配信スケジュール
             const scheduleList = document.getElementById('scheduleList');
             if (work.Total_Episodes && work.Total_Episodes !== 'N/A' && parseInt(work.Total_Episodes) > 0) {
-                let scheduleHTML = '';
-                const year = work.Year; // As per user's request
-                for (let i = 1; i <= parseInt(work.Total_Episodes); i++) {
-                    scheduleHTML += `
-                        <div class="schedule-item">
-                            <div class="episode-num">第${i}話</div>
-                            <div class="episode-title">${displayTitle}</div>
-                            <div class="episode-date">${year || 'N/A'}</div>
-                        </div>
-                    `;
-                }
-                scheduleList.innerHTML = scheduleHTML;
+                scheduleList.innerHTML = Array.from({ length: parseInt(work.Total_Episodes) }, (_, i) => `
+                    <div class="schedule-item">
+                        <div class="episode-num">第${i + 1}話</div>
+                        <div class="episode-title">${displayTitle || 'エピソード'}</div>
+                        <div class="episode-date">${work.Year || 'N/A'}</div>
+                    </div>
+                `).join('');
             } else {
                 scheduleList.innerHTML = '<p>配信スケジュール情報がありません。</p>';
             }
-        });
+
+            document.querySelector('.detail-container').style.visibility = 'visible';
+        };
     </script>
 </body>
+
 </html>

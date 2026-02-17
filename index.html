@@ -374,11 +374,6 @@
             color: #999;
         }
         
-        .no-results h3 {
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-        }
-        
         .calendar-section {
             position: fixed;
             bottom: 0;
@@ -905,8 +900,39 @@
         </div>
     </div>
 
-    <script src="data/works.js"></script>
+    <script src="data/works_part1.js"></script>
+    <script src="data/works_part2.js"></script>
+    <script src="data/works_part3.js"></script>
+    <script src="data/works_part4.js"></script>
+    <script src="data/works_part5.js"></script>
+    <script src="data/works_part6.js"></script>
+    <script src="data/works_part7.js"></script>
+    <script src="data/works_part8.js"></script>
+    <script src="data/actors_part1.js"></script>
+    <script src="data/actors_part2.js"></script>
+    <script src="data/actors_part3.js"></script>
+    <script src="data/actors_part4.js"></script>
+    <script src="data/actors_part5.js"></script>
     <script>
+        // データの安全な合体
+        const allWorks = [
+            ...(typeof worksPart1 !== 'undefined' ? worksPart1 : []),
+            ...(typeof worksPart2 !== 'undefined' ? worksPart2 : []),
+            ...(typeof worksPart3 !== 'undefined' ? worksPart3 : []),
+            ...(typeof worksPart4 !== 'undefined' ? worksPart4 : []),
+            ...(typeof worksPart5 !== 'undefined' ? worksPart5 : []),
+            ...(typeof worksPart6 !== 'undefined' ? worksPart6 : []),
+            ...(typeof worksPart7 !== 'undefined' ? worksPart7 : []),
+            ...(typeof worksPart8 !== 'undefined' ? worksPart8 : [])
+        ];
+        const allActors = [
+            ...(typeof actors_part1 !== 'undefined' ? actors_part1 : []),
+            ...(typeof actors_part2 !== 'undefined' ? actors_part2 : []),
+            ...(typeof actors_part3 !== 'undefined' ? actors_part3 : []),
+            ...(typeof actors_part4 !== 'undefined' ? actors_part4 : []),
+            ...(typeof actors_part5 !== 'undefined' ? actors_part5 : [])
+        ];
+
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         // 管理者設定
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -919,56 +945,65 @@
         
         const isAdmin = true;
         
-        // data/works.jsから読み込み
         let works = [];
+
+        // タイトル表示の最優先ロジック
+        function getWorkTitle(w) {
+            if (w.Title_JP && w.Title_JP !== 'N/A' && w.Title_JP !== '-') return w.Title_JP;
+            if (w.Title_EN && w.Title_EN !== 'N/A' && w.Title_EN !== '-') return w.Title_EN;
+            if (w.Title_Native && w.Title_Native !== 'N/A' && w.Title_Native !== '-') return w.Title_Native;
+            return '無題';
+        }
         
         // ページ読み込み時にデータを変換
-        if (typeof allWorks !== 'undefined') {
-            works = allWorks.map((w, i) => {
-                const countryMap = {
-                    'Korea': 'korea', 'South Korea': 'korea', 'Thailand': 'thailand', 'Taiwan': 'taiwan', 'China': 'china', 'Japan': 'japan', 'Philippines': 'philippines'
-                };
-                const country = countryMap[w.Country] || (w.Country || '').toLowerCase();
-                
-                const countryLabels = {
-                    'Korea': '韓国', 'South Korea': '韓国', 'Thailand': 'タイ', 'Taiwan': '台湾', 'China': '中国', 'Japan': '日本', 'Philippines': 'フィリピン'
-                };
-                const countryLabel = countryLabels[w.Country] || '海外';
-                
-                let fullDate = '未定';
-                if (w.Year && w.Month && w.Day) {
-                    const time = w.Time || '00:00';
-                    fullDate = `${w.Year}-${String(w.Month).padStart(2, '0')}-${String(w.Day).padStart(2, '0')}T${time}`;
-                }
-
-                const actors = [w.Cast1, w.Cast2].filter(a => a && a.trim && a.trim() !== '');
-                
-                return {
-                    id: i + 1,
-                    title: w.Title_JP || w.Title_EN || '無題',
-                    country: country,
-                    platform: w.Platform || 'other',
-                    nextAir: w.Year ? `${w.Year}年` : '未定',
-                    fullDate: fullDate, 
-                    year: w.Year, 
-                    thumbnail: countryLabel + 'BLドラマ',
-                    detailUrl: `work-detail.html?id=${i + 1}`,
-                    actors: actors,
-                    viewCount: Math.floor(Math.random() * 5000) + 500
-                };
-            });
-
-            works.sort((a, b) => {
-                if (a.fullDate === '未定' && b.fullDate === '未定') return 0;
-                if (a.fullDate === '未定') return 1;
-                if (b.fullDate === '未定') return -1;
-                return new Date(b.fullDate) - new Date(a.fullDate);
-            });
+        works = allWorks.map((w, i) => {
+            const countryMap = {
+                'Korea': 'korea', 'South Korea': 'korea', 'Thailand': 'thailand', 'Taiwan': 'taiwan', 'China': 'china', 'Japan': 'japan', 'Philippines': 'philippines'
+            };
+            const country = countryMap[w.Country] || (w.Country || '').toLowerCase();
             
-            console.log(`${works.length}件の作品を読み込みました`);
-        } else {
-            console.error('data/works.jsが読み込まれていません');
-        }
+            const countryLabels = {
+                'Korea': '韓国', 'South Korea': '韓国', 'Thailand': 'タイ', 'Taiwan': '台湾', 'China': '中国', 'Japan': '日本', 'Philippines': 'フィリピン'
+            };
+            const countryLabel = countryLabels[w.Country] || '海外';
+            
+            const title = getWorkTitle(w);
+            const year = w.Year;
+            const month = w.Month || w.month;
+            const day = w.Day || w.day;
+            const time = w.Time || w.time || '00:00';
+            const platform = w.Platform || '不明';
+
+            let fullDate = '未定';
+            if (year && month && day) {
+                fullDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}T${time}`;
+            }
+
+            const actors = [w.Cast1, w.Cast2].filter(a => a && a.trim && a.trim() !== '');
+            
+            return {
+                id: i + 1,
+                title: title,
+                country: country,
+                platform: platform.toLowerCase(),
+                nextAir: year ? `${year}年` : '不明',
+                fullDate: fullDate, 
+                year: year, 
+                thumbnail: countryLabel + 'BLドラマ',
+                detailUrl: `work-detail.html?id=${i + 1}`,
+                actors: actors,
+                viewCount: Math.floor(Math.random() * 5000) + 500
+            };
+        });
+
+        works.sort((a, b) => {
+            if (a.fullDate === '未定' && b.fullDate === '未定') return 0;
+            if (a.fullDate === '未定') return 1;
+            if (b.fullDate === '未定') return -1;
+            return new Date(b.fullDate) - new Date(a.fullDate);
+        });
+        
+        console.log(`${works.length}件の作品を読み込みました`);
 
         const platformNames = {
             netflix: "Netflix",
@@ -1065,53 +1100,50 @@
             const displayWorks = filteredWorks.slice(startIndex, endIndex);
 
             resultsInfo.textContent = `${totalItems}件の作品が見つかりました`;
-            
-            grid.innerHTML = '';
-            
+
             if (filteredWorks.length === 0) {
                 grid.innerHTML = `<div class="no-results"><h3>作品が見つかりませんでした</h3><p>検索条件を変更してください</p></div>`;
-                createPagination(0, 0);
+                createPagination(totalItems, totalPages);
                 return;
             }
-            
-            displayWorks.forEach(work => {
-                const card = document.createElement('div');
-                card.className = 'work-card';
-                if (selectedWorks.has(work.id)) card.classList.add('selected');
-                
-                card.addEventListener('click', (e) => {
-                    if (e.target.type === 'checkbox' || e.target.closest('.checkbox-overlay')) return;
-                    window.location.href = work.detailUrl;
-                });
-                
-                card.innerHTML = `
+
+            grid.innerHTML = displayWorks.map(w => {
+                const isSelected = selectedWorks.has(w.id);
+                return `
+                <div class="work-card ${isSelected ? 'selected' : ''}" data-detail-url="${w.detailUrl}">
                     <div class="work-thumbnail">
                         <div class="checkbox-overlay">
-                            <input type="checkbox" ${selectedWorks.has(work.id) ? 'checked' : ''} data-work-id="${work.id}">
+                            <input type="checkbox" data-work-id="${w.id}" ${isSelected ? 'checked' : ''}>
                         </div>
-                        ${work.thumbnail}
+                        ${w.thumbnail}
                     </div>
                     <div class="work-info">
-                        <div class="work-title">${work.title}</div>
+                        <div class="work-title">${w.title}</div>
                         <div class="work-meta">
                             <div>
-                                <span class="platform-tag">${platformNames[work.platform] || 'その他'}</span>
+                                <span class="platform-tag">${platformNames[w.platform] || '不明'}</span>
                             </div>
-                            <div class="next-air">配信年: ${work.nextAir}</div>
+                            <div class="next-air">配信年: ${w.year ? w.year + '年' : '不明'}</div>
                         </div>
                     </div>
-                `;
-                
-                grid.appendChild(card);
+                </div>`;
+            }).join('');
+
+            grid.querySelectorAll('.work-card').forEach(card => {
+                card.addEventListener('click', function(event) {
+                    if (!event.target.closest('.checkbox-overlay')) {
+                        window.location.href = this.dataset.detailUrl;
+                    }
+                });
             });
 
-            document.querySelectorAll('.checkbox-overlay input').forEach(checkbox => {
-                checkbox.addEventListener('change', (e) => {
-                    e.stopPropagation();
-                    const workId = parseInt(e.target.dataset.workId);
+            grid.querySelectorAll('.checkbox-overlay input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const workId = parseInt(this.dataset.workId);
                     toggleWork(workId);
                 });
             });
+            
             createPagination(totalItems, totalPages);
         }
 
@@ -1127,32 +1159,30 @@
             
             let html = '';
             
-            // 最初へボタン
             html += `<button class="page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="goToPage(1)">最初へ</button>`;
-            
-            // 前へボタン
             html += `<button class="page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="goToPage(${currentPage - 1})">← 前</button>`;
             
-            // ページ番号
             html += '<div class="page-numbers">';
             
             const maxVisiblePages = 5;
             let startPage = Math.max(1, currentPage - 2);
             let endPage = Math.min(totalPages, currentPage + 2);
-            
-            if (startPage > 1) {
+
+            if (currentPage > 3) {
                 html += `<button class="page-num" onclick="goToPage(1)">1</button>`;
-                if (startPage > 2) {
+                if (currentPage > 4) {
                     html += '<span class="dots">...</span>';
                 }
             }
             
             for (let i = startPage; i <= endPage; i++) {
-                html += `<button class="page-num ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+                if (i > 0 && i <= totalPages) {
+                    html += `<button class="page-num ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+                }
             }
             
-            if (endPage < totalPages) {
-                if (endPage < totalPages - 1) {
+            if (currentPage < totalPages - 2) {
+                if (currentPage < totalPages - 3) {
                     html += '<span class="dots">...</span>';
                 }
                 html += `<button class="page-num" onclick="goToPage(${totalPages})">${totalPages}</button>`;
@@ -1160,10 +1190,7 @@
             
             html += '</div>';
             
-            // 次へボタン
             html += `<button class="page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="goToPage(${currentPage + 1})">次 →</button>`;
-            
-            // 最後へボタン
             html += `<button class="page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="goToPage(${totalPages})">最後へ</button>`;
             
             pagination.innerHTML = html;
@@ -1228,13 +1255,6 @@
         
             const selectedItems = works
                 .filter(w => selectedWorks.has(w.id))
-                .map(w => {
-                    const originalWork = allWorks[w.id - 1];
-                    return {
-                        ...w,
-                        title: (originalWork && (originalWork.Title_JP || originalWork.Title_EN)) || w.title,
-                    };
-                })
                 .sort((a, b) => {
                     const aDated = a.fullDate !== '未定';
                     const bDated = b.fullDate !== '未定';
@@ -1250,13 +1270,13 @@
             list.innerHTML = selectedItems.map(work => {
                 const dateText = work.fullDate !== '未定'
                     ? formatDate(work.fullDate)
-                    : (work.year ? `${work.year}年` : '配信日未定');
+                    : (work.year ? `${work.year}年` : '配信年不明');
                 
                 return `
                 <div class="calendar-item">
                     <div class="calendar-date">${dateText}</div>
-                    <div class="calendar-work-title">${work.title || 'タイトル未定'}</div>
-                    <div class="calendar-platform">${platformNames[work.platform] || 'その他'}</div>
+                    <div class="calendar-work-title">${work.title}</div>
+                    <div class="calendar-platform">${platformNames[work.platform] || '不明'}</div>
                 </div>`;
             }).join('');
         }
@@ -1302,7 +1322,7 @@
             renderCalendar();
         });
 
-        // 初期化
+        // 初期描画の実行
         loadSelectedWorks();
         renderRanking();
         renderWorks();

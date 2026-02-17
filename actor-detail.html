@@ -296,133 +296,162 @@
 
     </div>
     
-    <script src="./data/works.js"></script>
-    <script src="./data/actors.js"></script>
+    <script src="./data/actors_part1.js"></script>
+    <script src="./data/actors_part2.js"></script>
+    <script src="./data/actors_part3.js"></script>
+    <script src="./data/actors_part4.js"></script>
+    <script src="./data/actors_part5.js"></script>
+    <script src="./data/works_part1.js"></script>
+    <script src="./data/works_part2.js"></script>
+    <script src="./data/works_part3.js"></script>
+    <script src="./data/works_part4.js"></script>
+    <script src="./data/works_part5.js"></script>
+    <script src="./data/works_part6.js"></script>
+    <script src="./data/works_part7.js"></script>
+    <script src="./data/works_part8.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            const allActors = [
+                ...(typeof actors_part1 !== 'undefined' ? actors_part1 : []),
+                ...(typeof actors_part2 !== 'undefined' ? actors_part2 : []),
+                ...(typeof actors_part3 !== 'undefined' ? actors_part3 : []),
+                ...(typeof actors_part4 !== 'undefined' ? actors_part4 : []),
+                ...(typeof actors_part5 !== 'undefined' ? actors_part5 : []),
+            ];
+
+            const allWorks = [
+                ...(typeof works_part1 !== 'undefined' ? works_part1 : []),
+                ...(typeof works_part2 !== 'undefined' ? works_part2 : []),
+                ...(typeof works_part3 !== 'undefined' ? works_part3 : []),
+                ...(typeof works_part4 !== 'undefined' ? works_part4 : []),
+                ...(typeof works_part5 !== 'undefined' ? works_part5 : []),
+                ...(typeof works_part6 !== 'undefined' ? works_part6 : []),
+                ...(typeof works_part7 !== 'undefined' ? works_part7 : []),
+                ...(typeof works_part8 !== 'undefined' ? works_part8 : []),
+            ];
+
+            function renderActorDetails(actor) {
+                document.title = `${actor.Name_JP} - 俳優詳細 | Asia BL Archive`;
+                const countryFlags = {
+                    '韓国': '🇰🇷 韓国',
+                    'タイ': '🇹🇭 タイ',
+                    '台湾': '🇹🇼 台湾',
+                    '中国': '🇨🇳 中国',
+                    '日本': '🇯🇵 日本',
+                    'フィリピン': '🇵🇭 フィリピン'
+                };
+
+                // Photo
+                const profilePhoto = document.getElementById('profilePhoto');
+                if (actor.Image_URL) {
+                    profilePhoto.innerHTML = `<img src="${actor.Image_URL}" alt="${actor.Name_JP}">`;
+                } else {
+                    profilePhoto.innerHTML = `
+                        <div class="profile-photo-placeholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            </svg>
+                        </div>
+                    `;
+                }
+
+                // Names
+                document.getElementById('actorNameJa').textContent = actor.Name_JP;
+                document.getElementById('actorNameEn').textContent = actor.Name_EN;
+
+                // Basic Info
+                const actorInfo = document.getElementById('actorInfo');
+                let infoHtml = '';
+                // Nationality from spreadsheet
+                if(actor.Nationality){
+                    infoHtml += `<div class="actor-info-item">${countryFlags[actor.Nationality] || actor.Nationality}</div>`;
+                }
+
+                if (actor.Birthdate) {
+                    const birthYear = new Date(actor.Birthdate).getFullYear();
+                    if (birthYear > 1900) {
+                        const age = new Date().getFullYear() - birthYear;
+                        infoHtml += `<div class="actor-info-item">${actor.Birthdate}（${age}歳）</div>`;
+                    } else {
+                        infoHtml += `<div class="actor-info-item">${actor.Birthdate}</div>`;
+                    }
+                }
+                if (actor.Height) {
+                    infoHtml += `<div class="actor-info-item">${actor.Height}cm</div>`;
+                }
+                actorInfo.innerHTML = infoHtml;
+
+                // Social Links
+                const socialLinks = document.getElementById('socialLinks');
+                let socialHTML = '';
+                if(actor.Instagram_URL) {
+                    socialHTML += `<a href="${actor.Instagram_URL}" class="social-btn" target="_blank" title="Instagram">📷</a>`;
+                }
+                if(actor.Twitter_URL) {
+                    socialHTML += `<a href="${actor.Twitter_URL}" class="social-btn" target="_blank" title="Twitter">𝕏</a>`;
+                }
+                if(actor.TikTok_URL) {
+                    socialHTML += `<a href="${actor.TikTok_URL}" class="social-btn" target="_blank" title="TikTok">🎵</a>`;
+                }
+                socialLinks.innerHTML = socialHTML;
+
+                // Bio / Profile_Text from spreadsheet
+                document.getElementById('bioText').textContent = actor.Profile_Text || '経歴情報はありません。';
+            }
+
+            function renderAppearedWorks(actor, allWorks) {
+                const appearedWorks = allWorks.filter(work => work.cast.some(c => c.actorName === actor.Name_JP || c.actorName === actor.Name_EN));
+                
+                document.getElementById('worksTitle').textContent = `📺 出演作品（${appearedWorks.length}作品）`;
+
+                const worksGrid = document.getElementById('worksGrid');
+                if(appearedWorks.length > 0) {
+                    worksGrid.innerHTML = appearedWorks.map(work => {
+                        const castInfo = work.cast.find(c => c.actorName === actor.Name_JP || c.actorName === actor.Name_EN);
+                        return `
+                            <a href="./work-detail.html?id=${work.id}" class="work-card">
+                                <div class="work-thumbnail">
+                                    ${work.thumbnail ? `<img src="${work.thumbnail}" alt="${work.title}">` : `
+                                        <div class="work-thumbnail-placeholder">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+                                            <div>${work.title}</div>
+                                        </div>`}
+                                </div>
+                                <div class="work-info">
+                                    <div class="work-title">${work.title}</div>
+                                    <div class="work-year">${work.year}年</div>
+                                    <div class="work-role">${castInfo.role}</div>
+                                </div>
+                            </a>
+                        `;
+                    }).join('');
+                } else if (actor.Representative_Works) {
+                     // Representative_Works from spreadsheet
+                     worksGrid.innerHTML = `<p>${actor.Representative_Works}</p>`;
+                } else {
+                    worksGrid.innerHTML = '<p>出演作品の情報はありません。</p>';
+                }
+            }
+
             const urlParams = new URLSearchParams(window.location.search);
             const actorName = urlParams.get('name');
 
-            let actor = allActors.find(a => a.Name_JP === actorName);
-
-            if (!actor && actorName) {
-                const lowerCaseActorName = actorName.toLowerCase();
-                actor = allActors.find(a => 
-                    (a.Name_JP && a.Name_JP.toLowerCase().includes(lowerCaseActorName)) ||
-                    (a.Name_EN && a.Name_EN.toLowerCase().includes(lowerCaseActorName)) ||
-                    (a.Name_Native && a.Name_Native.toLowerCase().includes(lowerCaseActorName))
-                );
-            }
+            const actor = allActors.find(a => a.Name_JP === actorName || a.Name_EN === actorName);
 
             if (actor) {
                 renderActorDetails(actor);
-                renderAppearedWorks(actor);
-} else {
+                renderAppearedWorks(actor, allWorks);
+            } else {
                 const actorContainer = document.getElementById('actorContainer');
                 actorContainer.innerHTML = `
                     <div class="section" style="text-align: center;">
-                        <h2 class="section-title">Update File</h2>
+                        <h2 class="section-title">俳優が見つかりません</h2>
+                        <p>指定された俳優の情報は見つかりませんでした。</p>
                     </div>
                 `;
-                document.title = 'Update File | Asia BL Archive';
+                document.title = '俳優が見つかりません | Asia BL Archive';
             }
         });
-
-        function renderActorDetails(actor) {
-            document.title = `${actor.Name_JP} - 俳優詳細 | Asia BL Archive`;
-            const countryFlags = {
-                '韓国': '🇰🇷 韓国',
-                'タイ': '🇹🇭 タイ',
-                '台湾': '🇹🇼 台湾',
-                '中国': '🇨🇳 中国',
-                '日本': '🇯🇵 日本',
-                'フィリピン': '🇵🇭 フィリピン'
-            };
-
-            // Photo
-            const profilePhoto = document.getElementById('profilePhoto');
-            if (actor.Image_URL) {
-                profilePhoto.innerHTML = `<img src="${actor.Image_URL}" alt="${actor.Name_JP}">`;
-            } else {
-                profilePhoto.innerHTML = `
-                    <div class="profile-photo-placeholder">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                        </svg>
-                    </div>
-                `;
-            }
-
-            // Names
-            document.getElementById('actorNameJa').textContent = actor.Name_JP;
-            document.getElementById('actorNameEn').textContent = actor.Name_EN;
-
-            // Basic Info
-            const actorInfo = document.getElementById('actorInfo');
-let infoHtml = `<div class="actor-info-item">${countryFlags[actor.Nationality] || actor.Nationality}</div>`;
-            if (actor.Birthdate) {
-                const birthYear = new Date(actor.Birthdate).getFullYear();
-                if (birthYear > 1900) {
-                    const age = new Date().getFullYear() - birthYear;
-                    infoHtml += `<div class="actor-info-item">${actor.Birthdate}（${age}歳）</div>`;
-                } else {
-                    infoHtml += `<div class="actor-info-item">${actor.Birthdate}</div>`;
-                }
-            }
-            if (actor.Height) {
-                infoHtml += `<div class="actor-info-item">${actor.Height}cm</div>`;
-            }
-            actorInfo.innerHTML = infoHtml;
-
-            // Social Links
-            const socialLinks = document.getElementById('socialLinks');
-            let socialHTML = '';
-            if(actor.Instagram_URL) {
-                socialHTML += `<a href="${actor.Instagram_URL}" class="social-btn" target="_blank" title="Instagram">📷</a>`;
-            }
-            if(actor.Twitter_URL) {
-                socialHTML += `<a href="${actor.Twitter_URL}" class="social-btn" target="_blank" title="Twitter">𝕏</a>`;
-            }
-            if(actor.TikTok_URL) {
-                socialHTML += `<a href="${actor.TikTok_URL}" class="social-btn" target="_blank" title="TikTok">🎵</a>`;
-            }
-            socialLinks.innerHTML = socialHTML;
-
-            // Bio
-document.getElementById('bioText').textContent = actor.Profile_Text;
-        }
-
-        function renderAppearedWorks(actor) {
-            const appearedWorks = allWorks.filter(work => work.cast.some(c => c.actorName === actor.Name_JP));
-            
-            document.getElementById('worksTitle').textContent = `📺 出演作品（${appearedWorks.length}作品）`;
-
-            const worksGrid = document.getElementById('worksGrid');
-            if(appearedWorks.length > 0) {
-                worksGrid.innerHTML = appearedWorks.map(work => {
-                    const castInfo = work.cast.find(c => c.actorName === actor.Name_JP);
-                    return \`
-                        <a href="./work-detail.html?id=${work.id}" class="work-card">
-                            <div class="work-thumbnail">
-                                ${work.thumbnail ? `<img src="${work.thumbnail}" alt="${work.title}">` : `
-                                    <div class="work-thumbnail-placeholder">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
-                                        <div>${work.title}</div>
-                                    </div>`}
-                            </div>
-                            <div class="work-info">
-                                <div class="work-title">${work.title}</div>
-                                <div class="work-year">${work.year}年</div>
-                                <div class="work-role">${castInfo.role}</div>
-                            </div>
-                        </a>
-                    \`;
-                }).join('');
-            } else if (actor.Representative_Works) {
-                 worksGrid.innerHTML = `<p>${actor.Representative_Works}</p>`;
-            }
-        }
-
     </script>
 </body>
 </html>

@@ -560,8 +560,8 @@ try {
     throw new Error("API error");
   }
 
-  const work = await response.json();
-
+const work = await response.json();
+console.log(work);
 if (!work || !work.ID) {
   displayNotFound();
   return;

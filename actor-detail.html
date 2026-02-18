@@ -434,23 +434,33 @@
             }
 
             const urlParams = new URLSearchParams(window.location.search);
-            const actorName = urlParams.get('name');
+const actorId = urlParams.get('id');
 
-            const actor = allActors.find(a => a.Name_JP === actorName || a.Name_EN === actorName);
+const GAS_URL = "https://script.google.com/macros/s/AKfycbxpXLwz63kj2_OWp4JzI5oFsrYQtFi3XCDOq47T9fxbJK2Itse00e-G8fZyJkAC-yxy3w/exec";
 
-            if (actor) {
-                renderActorDetails(actor);
-                renderAppearedWorks(actor, allWorks);
-            } else {
-                const actorContainer = document.getElementById('actorContainer');
-                actorContainer.innerHTML = `
-                    <div class="section" style="text-align: center;">
-                        <h2 class="section-title">俳優が見つかりません</h2>
-                        <p>指定された俳優の情報は見つかりませんでした。</p>
-                    </div>
-                `;
-                document.title = '俳優が見つかりません | Asia BL Archive';
+if (actorId) {
+    fetch(GAS_URL + "?id=" + actorId)
+        .then(res => res.json())
+        .then(actor => {
+
+            if (actor.error) {
+                renderNotFound();
+                return;
             }
+
+            renderActorDetails(actor);
+
+        })
+        .catch(err => {
+            console.error(err);
+            renderNotFound();
+        });
+} else {
+    renderNotFound();
+}
+
+
+            
         });
     </script>
 </body>
